@@ -1,0 +1,31 @@
+{
+	"host": "sepa.monas.vaimee.it",
+	"sparql11protocol": {
+		"protocol": "http",
+		"port": 8001,
+		"query": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"sparql11seprotocol": {
+		"reconnect" : true,
+		"protocol": "ws",
+		"availableProtocols": {
+			"ws": {
+				"port": 9001,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9002,
+				"path": "/secure/subscribe"
+			}
+		}
+	}
+}

@@ -1,0 +1,92 @@
+{
+	"sparql11protocol": {
+		"protocol": "http",
+		"port": 8666,
+		"query": {
+			"path": "/query",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/update",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"namespaces": {
+		"schema": "http://schema.org/",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"sosa": "http://www.w3.org/ns/sosa/",
+		"qudt": "http://qudt.org/schema/qudt#",
+		"unit": "http://qudt.org/vocab/unit#",
+		"arces-monitor": "http://wot.arces.unibo.it/monitor#",
+		"swamp": "http://swamp-project.org/ns#",
+		"mqtt": "http://wot.arces.unibo.it/mqtt#",
+		"time": "http://www.w3.org/2006/time#",
+		"wgs84_pos": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+		"gn": "http://www.geonames.org/ontology#"
+	},
+	"sparql11seprotocol": {
+		"reconnect": true,
+		"protocol": "ws",
+		"availableProtocols": {
+			"ws": {
+				"port": 9666,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9002,
+				"path": "/secure/subscribe"
+			}
+		}
+	},
+	"host": "mml.arces.unibo.it",
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"extended": {
+		"app": "SYNC"
+	},
+	"queries": {
+		"FROM_GRAPH": {
+			"sparql": "SELECT DISTINCT ?observation ?comment ?label ?location ?unit WHERE {GRAPH <http://wot.arces.unibo.it/observation> {?observation rdf:type sosa:Observation ; rdfs:label ?label ; rdfs:comment ?comment ; sosa:hasResult ?quantity ; sosa:hasFeatureOfInterest ?location . ?quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit }}"
+		},
+		"OBSERVATIONS": {
+			"sparql": "SELECT * WHERE {?unit qudt:symbol ?symbol . GRAPH <http://wot.arces.unibo.it/observation> {?observation rdf:type sosa:Observation ; rdfs:label ?label ; sosa:hasResult ?quantity ; sosa:hasFeatureOfInterest ?location . ?quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit . OPTIONAL {?quantity qudt:numericValue ?value} . OPTIONAL {?observation sosa:resultTime ?timestamp}} . GRAPH <http://wot.arces.unibo.it/context> {?location schema:name ?name} }"
+		}
+	},
+	"updates": {
+		"TO_SEPA": {
+			"sparql": "INSERT {GRAPH <http://wot.arces.unibo.it/observation> {?observation rdf:type sosa:Observation ; rdfs:label ?label ; rdfs:comment ?comment ; sosa:hasFeatureOfInterest ?location ; sosa:hasResult _:quantity . _:quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit ; qudt:numericValue 'NaN'}} WHERE {}",
+			"host": "dld.arces.unibo.it",
+			"sparql11protocol": {
+				"port": 8150
+			},
+			"forcedBindings": {
+				"observation": {
+					"type": "uri",
+					"value": "arces-monitor:ObservationXYZ"
+				},
+				"comment": {
+					"type": "literal",
+					"value": "This is an observation"
+				},
+				"label": {
+					"type": "literal",
+					"value": "The observation XYZ"
+				},
+				"location": {
+					"type": "uri",
+					"value": "arces-monitor:Mars"
+				},
+				"unit": {
+					"type": "uri",
+					"value": "unit:DegreeCelsius"
+				}
+			}
+		}
+	}
+}

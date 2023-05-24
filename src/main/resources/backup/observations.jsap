@@ -1,0 +1,148 @@
+{
+	"namespaces": {
+		"schema": "http://schema.org/",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"sosa": "http://www.w3.org/ns/sosa/",
+		"qudt": "http://qudt.org/schema/qudt/",
+		"unit": "http://qudt.org/vocab/unit/",
+		"time": "http://www.w3.org/2006/time#",
+		"alma": "http://www.almaelettronica.it/"
+	},
+	"updates": {
+		"LOG_OBSERVATION": {
+			"sparql": "INSERT {GRAPH ?graph {_:result sosa:isResultOf ?observation ; qudt:numericValue ?value ; time:inXSDDateTimeStamp ?timestamp}} WHERE {}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/observation/history"
+				},
+				"observation": {
+					"type": "uri",
+					"value": "alma:ObservationXYZ"
+				},
+				"value": {
+					"type": "literal",
+					"value": "1234",
+					"datatype": "xsd:decimal"
+				},
+				"timestamp": {
+					"type": "literal",
+					"value": "2020-03-07T11:40:43Z",
+					"datatype": "xsd:dateTime"
+				}
+			}
+		},
+		"REMOVE_OBSERVATION": {
+			"sparql": "WITH ?graph DELETE {?observation rdf:type sosa:Observation ; rdfs:label ?label ; rdfs:comment ?comment ; sosa:hasFeatureOfInterest ?location ; sosa:hasResult ?quantity . ?quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit ; qudt:numericValue ?value} WHERE {?observation rdf:type sosa:Observation ; rdfs:label ?label ; rdfs:comment ?comment ; sosa:hasFeatureOfInterest ?location ; sosa:hasResult ?quantity . ?quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit ; qudt:numericValue ?value}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/observation"
+				},
+				"observation": {
+					"type": "uri",
+					"value": "alma:ObservationXYZ"
+				}
+			}
+		},
+		"ADD_OBSERVATION": {
+			"sparql": "INSERT {GRAPH ?graph {?observation rdf:type sosa:Observation ; rdfs:label ?label ; rdfs:comment ?comment ; sosa:hasFeatureOfInterest ?location ; sosa:hasResult _:quantity . _:quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit ; qudt:numericValue 'NaN'}} WHERE {}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/observation"
+				},
+				"observation": {
+					"type": "uri",
+					"value": "alma:ObservationXYZ"
+				},
+				"comment": {
+					"type": "literal",
+					"value": "This is an observation"
+				},
+				"label": {
+					"type": "literal",
+					"value": "The observation XYZ"
+				},
+				"location": {
+					"type": "uri",
+					"value": "alma:Mars"
+				},
+				"unit": {
+					"type": "uri",
+					"value": "unit:DegreeCelsius"
+				}
+			}
+		},
+		"UPDATE_OBSERVATION_VALUE": {
+			"sparql": "WITH ?graph DELETE { ?quantity qudt:numericValue ?oldValue . ?observation sosa:resultTime ?oldTime } INSERT { ?quantity qudt:numericValue ?value . ?observation sosa:resultTime ?now } WHERE { ?observation rdf:type sosa:Observation ; sosa:hasResult ?quantity . OPTIONAL { ?observation sosa:resultTime ?oldTime} . OPTIONAL {?quantity qudt:numericValue ?oldValue } BIND(now() AS ?now) }",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/observation"
+				},
+				"observation": {
+					"type": "uri",
+					"value": "alma:ObservationXYZ"
+				},
+				"value": {
+					"type": "literal",
+					"datatype": "xsd:decimal",
+					"value": "12345.67890"
+				}
+			}
+		}
+	},
+	"queries": {
+		"LOG_QUANTITY": {
+			"sparql": "SELECT * WHERE {GRAPH ?graph {?result sosa:isResultOf ?observation ; qudt:numericValue ?value; time:inXSDDateTimeStamp ?timestamp} FILTER (xsd:dateTime(?timestamp) > xsd:dateTime(?from) && xsd:dateTime(?timestamp) < xsd:dateTime(?to))} ORDER BY ?timestamp",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/observation/history"
+				},
+				"from": {
+					"datatype": "xsd:dateTime",
+					"type": "literal",
+					"value": "2019-07-15T00:00:00Z"
+				},
+				"to": {
+					"datatype": "xsd:dateTime",
+					"type": "literal",
+					"value": "2019-07-15T23:59:59Z"
+				},
+				"observation": {
+					"type": "uri",
+					"value": "alma:ObservationXYZ"
+				}
+			}
+		},
+		"OBSERVATIONS": {
+			"sparql" : "SELECT * FROM ?graph FROM ?deviceGraph FROM ?unitGraph WHERE {?observation rdf:type sosa:Observation ; rdfs:label ?label ; sosa:hasResult ?quantity ; sosa:hasFeatureOfInterest ?device . ?quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit . ?unit qudt:symbol ?symbol . OPTIONAL {?quantity qudt:numericValue ?value} . OPTIONAL {?observation sosa:resultTime ?timestamp} . ?device schema:name ?name}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/observation"
+				},
+				"deviceGraph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/device"
+				},
+				"unitGraph" : {
+					"type": "uri",
+					"value": "http://www.qudt.org/2.1/vocab/unit"
+				}
+			}
+		},
+		"LOG_OBSERVATION": {
+			"sparql": "SELECT ?observation ?value ?timestamp FROM ?graph WHERE {?observation rdf:type sosa:Observation ; sosa:resultTime ?timestamp ; sosa:hasResult ?quantity . ?quantity qudt:numericValue ?value}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/observation"
+				}
+			}
+		}
+	}
+}

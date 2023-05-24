@@ -1,0 +1,31 @@
+{
+	"host": "localhost",
+	"sparql11protocol": {
+		"protocol": "http",
+		"port": 8000,
+		"query": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"sparql11seprotocol": {
+		"reconnect" : true,
+		"protocol": "ws",
+		"availableProtocols": {
+			"ws": {
+				"port": 9000,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9002,
+				"path": "/secure/subscribe"
+			}
+		}
+	}
+}

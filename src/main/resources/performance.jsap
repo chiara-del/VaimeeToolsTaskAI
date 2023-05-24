@@ -1,0 +1,49 @@
+{
+	"host": "localhost",
+	"sparql11protocol": {
+		"protocol": "http",
+		"port": 8000,
+		"query": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"sparql11seprotocol": {
+		"reconnect" : true,
+		"protocol": "ws",
+		"availableProtocols": {
+			"ws": {
+				"port": 9000,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9002,
+				"path": "/secure/subscribe"
+			}
+		}
+	},
+	"extended": {
+		"app": "PERF"
+	},
+	"namespaces": {
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"schema": "http://schema.org/"
+	},
+	"queries": {
+		"ALL_TRIPLE": {
+			"sparql": "SELECT ?s ?p ?o WHERE {?s ?p ?o}"
+		}
+	},
+	"updates": {
+		"ONE_TRIPLE": {
+			"sparql": "DELETE {?s ?p ?o} INSERT {_:message schema:timestamp ?t} WHERE {OPTIONAL{?s ?p ?o} BIND(now() as ?t)}"
+			
+		}
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"oauth": {
+		"enable": true,
+		"ssl": "TLSv1.2",
+		"trustall": true,
+		"registration": {
+			"endpoint": "https://sepa.vaimee.it:8443/auth/realms/MONAS/clients-registrations/default",
+			"initialAccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI4Y2E2ZGNiNC1jZmY5LTQzNGUtODNhNi05NTk4MzQ1NjUxZGMifQ.eyJleHAiOjAsImlhdCI6MTYwMTAxNjU3NiwianRpIjoiM2MyMDI2ZGQtZDEyMi00NGQ0LTkyYjAtZjM1Y2IzMzBiNGUzIiwiaXNzIjoiaHR0cHM6Ly9zZXBhLnZhaW1lZS5pdDo4NDQzL2F1dGgvcmVhbG1zL01PTkFTIiwiYXVkIjoiaHR0cHM6Ly9zZXBhLnZhaW1lZS5pdDo4NDQzL2F1dGgvcmVhbG1zL01PTkFTIiwidHlwIjoiSW5pdGlhbEFjY2Vzc1Rva2VuIn0.1tLoZ7PRaGtuwj5694f9ugaCxE-4n0J7Ny-7rqFdark",
+			"username": "demo"
+		},
+		"authentication": {
+			"endpoint": "https://sepa.vaimee.it:8443/auth/realms/MONAS/protocol/openid-connect/token"
+		},
+		"provider": "keycloak"
+	}
+}

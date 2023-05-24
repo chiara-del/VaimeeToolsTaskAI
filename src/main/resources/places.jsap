@@ -1,0 +1,136 @@
+{
+	"updates": {
+		"DELETE_PLACE": {
+			"sparql": "WITH ?graph DELETE {?place rdf:type schema:Place; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?lon} WHERE {?place rdf:type schema:Place ; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?lon}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/places"
+				},
+				"place": {
+					"type": "uri",
+					"value": "monas:Vaimee"
+				}
+			}
+		},
+		"LOCATE_FOI": {
+			"sparql": "INSERT DATA {GRAPH ?graph {?foi schema:location ?place}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/devices"
+				},
+				"place": {
+					"type": "uri",
+					"value": "monas:Vaimee"
+				},
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				}
+			}
+		},
+		"INSERT_PLACE": {
+			"sparql": "INSERT {GRAPH ?graph {?place rdf:type schema:Place; schema:name ?name ;  schema:GeoCoordinates _:coordinate . _:coordinate schema:latitude ?lat ; schema:longitude ?lon}} WHERE {}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/places"
+				},
+				"place": {
+					"type": "uri",
+					"value": "monas:Vaimee"
+				},
+				"name": {
+					"type": "literal",
+					"value": "VAIMEE srl"
+				},
+				"lat": {
+					"type": "literal",
+					"value": "44.5026257",
+					"datatype": "xsd:decimal"
+				},
+				"lon": {
+					"type": "literal",
+					"value": "11.3700933",
+					"datatype": "xsd:decimal"
+				}
+			}
+		},
+		"LINK_PLACES": {
+			"sparql": "INSERT DATA { GRAPH ?graph {?root schema:containsPlace ?child . ?child schema:containedInPlace ?root }}",
+			"forcedBindings": {
+				"root": {
+					"type": "uri",
+					"value": "http://a.uri/rootPlace"
+				},
+				"child": {
+					"type": "uri",
+					"value": "http://a.uri/childPlace"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/places"
+				}
+			}
+		},
+		"DELETE_LINK_PLACES": {
+			"sparql": "DELETE DATA { GRAPH ?graph {?root schema:containsPlace ?child . ?child schema:containedInPlace ?root }}",
+			"forcedBindings": {
+				"root": {
+					"type": "uri",
+					"value": "http://a.uri/rootPlace"
+				},
+				"child": {
+					"type": "uri",
+					"value": "http://a.uri/childPlace"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/places"
+				}
+			}
+		}
+	},
+	"queries": {
+		"PLACES": {
+			"sparql": "SELECT * WHERE {GRAPH ?graph {?place rdf:type schema:Place ; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?long}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/places"
+				}
+			}
+		},
+		"CONTAINED_PLACES": {
+			"sparql": "SELECT * WHERE {GRAPH ?graph {?place rdf:type schema:Place ; schema:containedInPlace ?root ; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?long}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/places"
+				},
+				"root": {
+					"type": "uri",
+					"value": "http://a.uri/rootPlace"
+				}
+			}
+		},
+		"FOI_LOCATION": {
+			"sparql": "SELECT * FROM ?deviceGraph FROM ?placeGraph WHERE {?foi schema:location ?place . ?place schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?long}",
+			"forcedBindings": {
+				"deviceGraph": {
+					"type": "uri",
+					"value": "http://demo/devices"
+				},
+				"placeGraph": {
+					"type": "uri",
+					"value": "http://demo/places"
+				},
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				}
+			}
+		}
+	}
+}

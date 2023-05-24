@@ -1,0 +1,23 @@
+{
+	"#include": [
+		"file:////host.jsap",
+		"file:////namespaces.jsap"
+	],
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"extended": {
+		"app" : "CSV",
+		"separator" : ";",
+		"xsd" : "http://www.w3.org/2001/XMLSchema#", 
+		"datatypes" : ["xsd:dateTime","xsd:float","xsd:integer","xsd:string","xsd:decimal","xsd:double","xsd:boolean"],
+		"columns" : [0,0,1,3,3]
+	},
+	"updates": {
+		"IMPORT_BANK": {
+			"sparql": "INSERT {GRAPH bank:graph {_:m rdf:type bank:Transaction ; }} WHERE {}"
+		}
+	}
+}

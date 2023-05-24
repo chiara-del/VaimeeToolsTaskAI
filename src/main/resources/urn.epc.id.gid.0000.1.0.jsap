@@ -1,0 +1,25 @@
+{
+	"#include": [
+		"file:////host.jsap",
+		"file:////observations.jsap",
+		"file:////namespaces.jsap"
+	],
+	"oauth": {
+		"enable": true,
+		"ssl": "TLSv1.2",
+		"registration": {
+			"endpoint": "https://sepa.vaimee.it:9443/auth/realms/MONAS/clients-registrations/default",
+			"initialAccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI4Y2E2ZGNiNC1jZmY5LTQzNGUtODNhNi05NTk4MzQ1NjUxZGMifQ.eyJleHAiOjAsImlhdCI6MTYwMjY5MzE4MSwianRpIjoiZTkxMjVhZTktNTA1YS00Mjg4LTk2NjgtYTE4MjEyZjNiZmJkIiwiaXNzIjoiaHR0cHM6Ly9zZXBhLnZhaW1lZS5pdDo4NDQzL2F1dGgvcmVhbG1zL01PTkFTIiwiYXVkIjoiaHR0cHM6Ly9zZXBhLnZhaW1lZS5pdDo4NDQzL2F1dGgvcmVhbG1zL01PTkFTIiwidHlwIjoiSW5pdGlhbEFjY2Vzc1Rva2VuIn0.I6QX2OEkFzDIzFlqzCZjKK4LK1Je9e0_5p-5gmip1Wc",
+			"username": "demo"
+		},
+		"authentication": {
+			"endpoint": "https://sepa.vaimee.it:9443/auth/realms/MONAS/protocol/openid-connect/token",
+			"client_id": "PN8Et/n0ny2F1YBHax+e7nw3jFRunTZHjGMu6UBsNsA=",
+			"client_secret": "9jhuj6vbA+fiC3mfsY152+mot47u1O0so31BkWN6NS0ezfyKRoc5Z5+ozk7nBQpv",
+			"jwt": "xabtQWoH8RJJk1FyKJ78J3jaFqpRDQjXEwGovBZ5+1k3fauyBMvMa0G6pVNKIgd3RW7j9eVUrUqXtbQ0rncYstZhGVz6qwczswA9VHaZfFSwTnS0kbuhHWQzTYAjuNdW2XR3o3pvogn/Og2yVDEcuwrwrEwuD8ombiTGEno/AbLPkKEb0BFiUz7SIcCvnOEGtDl0z9EO0AcpzWl7Hdp6R6YuAkVLP2ZYZGiFiUE1KcW0q/Dm8Zt4/gB7CffQNVRaUtqdJ+ghmRWh35+nszVbEaph+iB/tufekaEiCXFV2rAWxXDaVlg8NyVHFIQr3PbkDzuEEbs7/uK6SPHsoAeOqV2DeE0to1mPE2/+KLaRpZXikRj3Ydx66ZZqaAuqDDEBZWh+fXL7SKqT60HmzX3agZ41CdOeVzR/ArG3dAvcg1wqQKzFdwlsNcZM4mBLlUz33Z0VnGdPqEx4X8dxHdi35ZiyT6SE0AlMQ3WgV6ZWxsDd9LMvPTKGQB0AU1SteomxKFILH/Eye0imaE0056JZK/DLl5Krhq8Us3FnCH5MldnWzx3Fx/6+EpJZODmndgbNZ/oMMDRhPZf/V4I9ah8WdSTDIrciir7KRue19dF31U4OQrOFpxveJi1P3led1lWCp/+5ca2ROP7vGtNWpmteNAGOjp6+9qcZp1tyD0Bzt8GIwepVcj7H0dLLWAU4LOUUZdvLI7A+X/wPnzBxOrzkTLPyfLuCROMzyyP3DpawmGm3U+px3bF0NXQraiy1QcqbeFEru6ynmZYGsSBPIrtuuke6sTHW6E8vt4471t5nzudYZxjUiji3MUTAaKExg4weDHmxdcLRTxyyI05H6raKs1izJieJdFXGB4qxsIXn5IMzgHdiECwF/X1R/1Ys4zMBm6EnB4tLHrRSwxTXDkI2kFSkYZMLNaj6od/o1UlrZ+04USXQtN7PiLpoL9iz6kmcaBJrOAPZ9mmhYPWAfEufKC+7RuUU96muAJkKsHnM/sm0NoUGHdmbxfaBS3zBL8I35gV/TPBxA3fkqeP5+5hQG+yz+BvukqkQ6ZpMwj81QgbEaLn8L5xYojQVJIVmnagLa2c8gByiOQJ+NFIN13bH+w4emIJCkYbEbtCxQhNPDTCKK5/zKgyU8tHdGgHi1mb0K+0vU3d7tpxfiAg/lyg14aYfCRxRuFwM/iqeL5UTdXog8tX/t11m/icoOz751u7noRQt6YUmUiQXcH4i7hpc806nn6EeRyxiRVyghiZkD4F/BWjzZa4PQ+Db5apmEJgz7ML/GRNe1Ku6qipj0b+9rVw+jKG6Fkxfn+305Z6nRiKKOgjmZyHTdvmnxDuCJvMpx3L06HXJkkYH2GiQSrDzqQKusF2H1bkjyfrnSFecN5lMqGM0JRbjk0klkczcShDE0cDQdSiFYc06OIww7Nyuc3+lDHijTbdc7LgIdvwzOBfwgiBs2PMek0DBwOdvSDoCIaBqqJFRbjlMLOpq34xiXqs7kY9QH7xF8Mt4EhGqAcY0DG6d1EGycmPnpFCYi3JnHaBxS3CLGJWfTDAqiu9HTzOwuyTlFIvN2IcL/sWrjzBc+TNknv+XUVnH9r4C92rTOxQEQqfVI3rl2X0XthiKeQ/U6noE/RO24I1r0gg2GdJEU9pdIld9pmoYzRuJa+7cwVHmVXPgmbknl8b+li7e8sE6XJOCi4HII+y6b9K0uJzX22YFN1Z28/pWztOI+t2RVqlfiDcaPEATDkQkc5eu9lmoXn+NKxPi+v8FXl5LT+nHZYxXRA5w4fdJN027WaDjSKKR858Xs/DY7sNKwrjuG9rMPWkBoUfJKUcatmnu0vlrQx884AaOfIqZc6h1ZgjK",
+			"expires": "SVCdPhHMqHzO2FOYga88kg==",
+			"type": "XPrHEX2xHy+5IuXHPHigMw=="
+		},
+		"provider": "keycloak"
+	}
+}

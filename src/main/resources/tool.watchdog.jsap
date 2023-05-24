@@ -1,0 +1,25 @@
+{
+	"#include": [
+		"file:////host.jsap",
+		"file:////namespaces.jsap"
+	],
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"extended": {
+		"app" : "WATCHDOG",
+		"interval" : 5000
+	},
+	"queries": {
+		"WD_SUB": {
+			"sparql": "SELECT * WHERE {?s ?p ?o}"
+		}
+	},
+	"updates": {
+		"WD_UPD": {
+			"sparql": "SELECT * WHERE {graph tools:wdGraph {tools:wd tools:lastUpdate ?now BIND(now() AS ?now)}}"
+		}
+	}
+}

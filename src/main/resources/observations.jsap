@@ -1,0 +1,165 @@
+{
+	"queries": {
+		"USER_DEVICES": {
+			"sparql": "SELECT ?idCentralina ?sondaA ?sondaB ?sondaC ?sondaD ?timestamp ?timestampB ?timestampC ?timestampD FROM <http://demo/observations> FROM <http://demo/devices> WHERE {?idCentralina sosa:hosts ?alma . ?alma rdf:type monas:AlmaTSX1 . ?alma sosa:hosts ?sa . ?sa sosa:observes monas:ProbeATemperature . ?obsA sosa:madeBySensor ?sa ; sosa:resultTime ?timestamp ; sosa:hasSimpleResult ?sondaA . ?alma sosa:hosts ?sb . ?sb sosa:observes monas:ProbeBTemperature . ?obsB sosa:madeBySensor ?sb ; sosa:resultTime ?timestampB ; sosa:hasSimpleResult ?sondaB . ?alma sosa:hosts ?sc . ?sc sosa:observes monas:ProbeCTemperature . ?obsC sosa:madeBySensor ?sc ; sosa:resultTime ?timestampC ; sosa:hasSimpleResult ?sondaC . ?alma sosa:hosts ?sd . ?sd sosa:observes monas:ProbeDTemperature . ?obsD sosa:madeBySensor ?sd ; sosa:resultTime ?timestampD ; sosa:hasSimpleResult ?sondaD}"
+		},
+		"OBSERVATIONS": {
+			"sparql": "SELECT * WHERE {graph <http://demo/observations> {?obs sosa:hasFeatureOfInterest ?foi ; rdf:type sosa:Observation ; sosa:madeBySensor ?urn ; sosa:resultTime ?timestamp ; sosa:hasSimpleResult ?value }  graph  <http://demo/devices> {?foi schema:location ?location . ?urn sosa:observes ?prop} graph <http://demo/places> {?location  schema:GeoCoordinates ?coordinate ; schema:name ?name . ?coordinate schema:latitude ?lat ; schema:longitude ?long }  graph  <http://demo/properties> {?prop rdfs:label ?label  . ?prop qudt:applicableUnit ?unit} graph <http://qudt.org/2.1> {?unit rdfs:label ?symbol}}"
+		},
+		"OBSERVATIONS_BY_FOI": {
+			"sparql": "SELECT * WHERE {graph <http://demo/observations> {?obs sosa:hasFeatureOfInterest ?foi ; rdf:type sosa:Observation ; sosa:madeBySensor ?urn ; sosa:resultTime ?timestamp ; sosa:hasSimpleResult ?value }  graph  <http://demo/devices> {?foi schema:location ?location . ?urn sosa:observes ?prop} graph <http://demo/places> {?location  schema:GeoCoordinates ?coordinate ; schema:name ?name . ?coordinate schema:latitude ?lat ; schema:longitude ?long }  graph  <http://demo/properties> {?prop rdfs:label ?label  . ?prop qudt:applicableUnit ?unit} graph <http://qudt.org/2.1> {?unit rdfs:label ?symbol}}",
+			"forcedBindings": {
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				}
+			}
+		},
+		"LOGGER": {
+			"sparql": "SELECT ?urn ?foi ?timestamp ?value FROM ?graph WHERE {?obs rdf:type sosa:Observation; sosa:madeBySensor ?urn ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?timestamp ; sosa:hasSimpleResult ?value}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/observations"
+				}
+			}
+		},
+		"LOG_QUANTITY": {
+			"sparql": "SELECT * FROM <http://demo/history> FROM <http://demo/devices> WHERE {?urn sosa:madeObservation ?obs . ?urn sosa:observes ?property . ?obs sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?timestamp ; sosa:hasSimpleResult ?value FILTER (?timestamp > STRDT(?from, xsd:dateTimeStamp) && ?timestamp < STRDT(?to,xsd:dateTimeStamp))} ORDER BY ?timestamp",
+			"forcedBindings": {
+				"from": {
+					"datatype": "xsd:dateTimeStamp",
+					"type": "literal",
+					"value": "2020-10-15T00:00:00Z"
+				},
+				"to": {
+					"datatype": "xsd:dateTimeStamp",
+					"type": "literal",
+					"value": "2020-10-15T23:59:59Z"
+				},
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				},
+				"property": {
+					"type": "uri",
+					"value": "monas:ProbeATemperature"
+				}
+			}
+		}
+	},
+	"updates": {
+		"TSX1_OBSERVATION": {
+			"sparql": "WITH ?graph DELETE {?obs1 rdf:type sosa:Observation; sosa:madeBySensor ?probe1 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue1 . ?obs2 rdf:type sosa:Observation; sosa:madeBySensor ?probe2 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue2 . ?obs3 rdf:type sosa:Observation; sosa:madeBySensor ?probe3 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue3 . ?obs4 rdf:type sosa:Observation; sosa:madeBySensor ?probe4 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue4} INSERT {_:obs1 rdf:type sosa:Observation; sosa:madeBySensor ?probe1 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value1 . _:obs2 rdf:type sosa:Observation; sosa:madeBySensor ?probe2 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value2 . _:obs3 rdf:type sosa:Observation; sosa:madeBySensor ?probe3 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value3 . _:obs4 rdf:type sosa:Observation; sosa:madeBySensor ?probe4 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value4} WHERE {OPTIONAL{?obs1 rdf:type sosa:Observation; sosa:madeBySensor ?probe1 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue1 . ?obs2 rdf:type sosa:Observation; sosa:madeBySensor ?probe2 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue2 . ?obs3 rdf:type sosa:Observation; sosa:madeBySensor ?probe3 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue3 . ?obs4 rdf:type sosa:Observation; sosa:madeBySensor ?probe4 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue4} . BIND(now() AS ?now)}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/observations"
+				},
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				},
+				"probe1": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.1"
+				},
+				"value1": {
+					"type": "literal",
+					"value": 1.0
+				},
+				"probe2": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.2"
+				},
+				"value2": {
+					"type": "literal",
+					"value": 2.0
+				},
+				"probe3": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.3"
+				},
+				"value3": {
+					"type": "literal",
+					"value": 3.0
+				},
+				"probe4": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.4"
+				},
+				"value4": {
+					"type": "literal",
+					"value": 4.0
+				}
+			}
+		},
+		"OBSERVATION": {
+			"sparql": "WITH ?graph DELETE {?obs rdf:type sosa:Observation; sosa:madeBySensor ?urn ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue} INSERT {_:obs rdf:type sosa:Observation; sosa:madeBySensor ?urn ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value} WHERE {OPTIONAL{?obs sosa:hasFeatureOfInterest ?foi ; rdf:type sosa:Observation ; sosa:madeBySensor ?urn ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue} . BIND(now() AS ?now)}",
+			"forcedBindings": {
+				"urn": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.1"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/observations"
+				},
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				},
+				"value": {
+					"type": "literal",
+					"value": 35.6
+				}
+			}
+		},
+		"ADD_OBSERVABLE_PROPERTY": {
+			"sparql": "INSERT DATA {GRAPH ?graph {?prop rdf:type sosa:ObservableProperty; qudt:applicableUnit ?unit ; rdfs:label ?label}}",
+			"forcedBindings": {
+				"prop": {
+					"type": "uri",
+					"value": "monas:ProbeATemperature"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/properties"
+				},
+				"unit": {
+					"type": "uri",
+					"value": "unit:DEG_C"
+				},
+				"label": {
+					"type": "literal",
+					"value": "Probe A"
+				}
+			}
+		},
+		"LOGGER": {
+			"sparql": "INSERT {graph ?graph {?urn sosa:madeObservation _:obs . _:obs sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?timestamp ; sosa:hasSimpleResult ?value}} WHERE {}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/history"
+				},
+				"urn": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.1.0"
+				},
+				"foi": {
+					"type": "uri",
+					"value": "monas:ProbeA"
+				},
+				"timestamp": {
+					"type": "literal",
+					"value": "2020-09-12T00:00.00"
+				},
+				"value": {
+					"type": "literal",
+					"value": "10.3"
+				}
+			}
+		}
+	}
+}

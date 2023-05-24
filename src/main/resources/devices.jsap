@@ -1,0 +1,74 @@
+{
+	"queries": {
+		"TSX1": {
+			"sparql": "SELECT * FROM ?graph {?urn rdf:type sosa:Platform ; sosa:hosts ?s . ?s sosa:observes ?quantity}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/devices"
+				}
+			}
+		},
+		"TESAR_ECO_DESIGN_TRANSFORMER": {
+			"sparql": "SELECT * FROM ?graph {?urn rdf:type sosa:Platform ; rdf:type sosa:FeatureOfInterest ; rdf:type monas:TesarEcoDesignTrasformer ; sosa:hosts ?device}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/devices"
+				}
+			}
+		}
+	},
+	"updates": {
+		"ADD_TSX1": {
+			"sparql": "INSERT DATA {graph ?graph {?urn rdf:type sosa:Platform ; rdf:type monas:AlmaTSX1 ; sosa:hosts ?s1 ; sosa:hosts ?s2 ; sosa:hosts ?s3 ; sosa:hosts ?s4 . ?s1 rdf:type sosa:Sensor ; sosa:observes monas:ProbeATemperature . ?s2 rdf:type sosa:Sensor ; sosa:observes monas:ProbeBTemperature . ?s3 rdf:type sosa:Sensor ; sosa:observes monas:ProbeCTemperature . ?s4 rdf:type sosa:Sensor ; sosa:observes monas:ProbeDTemperature }}",
+			"forcedBindings": {
+				"urn": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.1.0"
+				},
+				"s1": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.1"
+				},
+				"s2": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.2"
+				},
+				"s3": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.3"
+				},
+				"s4": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.4"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/devices"
+				}
+			}
+		},
+		"ADD_TESAR_ECO_DESIGN_TRANSFORMER": {
+			"sparql": "INSERT DATA {graph ?graph {?urn rdf:type sosa:Platform ; rdf:type monas:TesarEcoDesignTrasformer ; rdf:type sosa:FeatureOfInterest ; sosa:hosts ?device ; rdfs:label ?label}}",
+			"forcedBindings": {
+				"label": {
+					"type": "literal",
+					"value": "Tesar Eco Design Trasformer"
+				},
+				"urn": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				},
+				"device" : {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.1.0"
+				},
+				"graph" : {
+					"type": "uri",
+					"value": "http://demo/devices"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"extended": {
+		"app" : "AW_CONVERTER",
+		"in" : "aw-ale.json",
+		"fix" : "aw-ale.csv",
+		"out" : "aw-ale-fixed.csv",
+		"mode" : "fix"
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"namespaces": {
+		"schema": "http://schema.org/",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"sosa": "http://www.w3.org/ns/sosa/",
+		"alma": "http://www.almaelettronica.it/"
+	},
+	"queries": {
+		"COUNT_TRIPLES": {
+			"sparql": "SELECT (COUNT(?log) AS ?count) WHERE {GRAPH ?graph {?log ?x ?y}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri"
+				}
+			}
+		},
+		"COUNT_PLACE": {
+			"sparql": "SELECT (COUNT(?place) AS ?count) WHERE {GRAPH ?graph {?place rdf:type schema:Place}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri"
+				}
+			}
+		},
+		"COUNT_DEVICE": {
+			"sparql": "SELECT (COUNT(?device) AS ?count) WHERE {GRAPH ?graph {?device rdf:type alma:Device}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri"
+				}
+			}
+		},
+		"COUNT_OBSERVATIONS": {
+			"sparql": "SELECT (COUNT(?observation) AS ?count) WHERE {GRAPH ?graph {?observation rdf:type sosa:Observation}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri"
+				}
+			}
+		}
+	}
+}

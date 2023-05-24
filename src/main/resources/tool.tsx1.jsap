@@ -1,0 +1,35 @@
+{
+	"#include": [
+		"file:////host.jsap",
+		"file:////observations.jsap",
+		"file:////places.jsap",
+		"file:////devices.jsap",
+		"file:////namespaces.jsap"
+	],
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"extended": {
+		"app": "TSX1_MONITORING",
+		"devices": {
+			"urn:epc:id:gid:0000.1.0": {
+				"modbus": {
+					"ip": "128.116.141.5",
+					"port": 60000,
+					"id": 247,
+					"sleep": 5000
+				},
+				"graph": "http://demo/observations",
+				"foi": "urn:epc:id:gid:13101974.0.0",
+				"sensors": [
+					"urn:epc:id:gid:0000.2.1",
+					"urn:epc:id:gid:0000.2.2",
+					"urn:epc:id:gid:0000.2.3",
+					"urn:epc:id:gid:0000.2.4"
+				]
+			}
+		}
+	}
+}

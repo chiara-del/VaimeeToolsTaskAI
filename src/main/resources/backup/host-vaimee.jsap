@@ -1,0 +1,43 @@
+{
+	"host": "sepa.vaimee.it",
+	"oauth": {
+		"enable": true,
+		"ssl": "TLS",
+		"trustall": true,
+		"register": "https://sepa.vaimee.it:8443/oauth/register",
+		"tokenRequest": "https://sepa.vaimee.it:8443/oauth/token",
+		"client_id": "WO7WzAM2lGIcGhN9A7aS6g==",
+		"client_secret": "Jxo4sYqGc0pGKES4V3YY/Q==",
+		"jwt": "xabtQWoH8RJJk1FyKJ78J8h8i2PcWmAugfJ4J6nMd+3gCx6vqM+FSEsa5xWqf1R52+SD1Fe/f5X7aJMicypn7AzgFYwhxms6mleYPIL5g/Z1fstRdw+t+Je40P1vHJ8YnaHl1hZ+o3Du4iAcM1BAbSvmD6phymbPgTYQ39HqhKQkR6y/JEKFWDK57BjzdeT8BVs1wdLHqanaclJB65Bt6Lwjag8aULv+EDojQ9GM3adVGaggP3oj1IMEMbIs01rWUkZ8EZdyn/LyguAv7oJILq+38GO8g/toTrGZpHjrct6qm3Q8G4IE9bplml0u+GzPDH3FTw5NeZDxU8wxZ9/l+HuKZKTM4yYyy6E/CwfGPOerzjhB9SywKnixnnF/URL3ehr7nGasCHyL/C2nRQvZb+s1BNuyVXCi/WwnJCk6S9PCPvnJuyoc7mWyB+es4hkpAaBdOPIVkTYD1YcHCV2FTBWEMgfmSylpaJhK5Nmr9/6exQ3VCWzrZMlxMMAQV47us+dtFrEo+chz6oC/vg+Z8fzmadieQ7/wstwbMcHygSB9k7JilMWZUYffMxc+UBs/ap87W2BfZh0CHyTE9BeFOA==",
+		"expires": "ljVWqRPIMZgF+NlYZXE8xg==",
+		"type": "XPrHEX2xHy+5IuXHPHigMw=="
+	},
+	"sparql11protocol": {
+		"protocol": "https",
+		"port": 8443,
+		"query": {
+			"path": "/secure/query",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/secure/update",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"sparql11seprotocol": {
+		"reconnect": true,
+		"protocol": "wss",
+		"availableProtocols": {
+			"ws": {
+				"port": 9000,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9090,
+				"path": "/secure/subscribe"
+			}
+		}
+	}
+}

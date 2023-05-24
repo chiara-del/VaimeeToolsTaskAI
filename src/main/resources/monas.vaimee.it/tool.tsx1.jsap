@@ -1,0 +1,70 @@
+{
+	"updates": {
+		"TSX1_OBSERVATION": {
+			"sparql": "WITH ?graph DELETE {?obs1 rdf:type sosa:Observation; sosa:madeBySensor ?probe1 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue1 . ?obs2 rdf:type sosa:Observation; sosa:madeBySensor ?probe2 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue2 . ?obs3 rdf:type sosa:Observation; sosa:madeBySensor ?probe3 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue3 . ?obs4 rdf:type sosa:Observation; sosa:madeBySensor ?probe4 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue4} INSERT {_:obs1 rdf:type sosa:Observation; sosa:madeBySensor ?probe1 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value1 . _:obs2 rdf:type sosa:Observation; sosa:madeBySensor ?probe2 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value2 . _:obs3 rdf:type sosa:Observation; sosa:madeBySensor ?probe3 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value3 . _:obs4 rdf:type sosa:Observation; sosa:madeBySensor ?probe4 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?now ; sosa:hasSimpleResult ?value4} WHERE {OPTIONAL{?obs1 rdf:type sosa:Observation; sosa:madeBySensor ?probe1 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue1 . ?obs2 rdf:type sosa:Observation; sosa:madeBySensor ?probe2 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue2 . ?obs3 rdf:type sosa:Observation; sosa:madeBySensor ?probe3 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue3 . ?obs4 rdf:type sosa:Observation; sosa:madeBySensor ?probe4 ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?oldTime ; sosa:hasSimpleResult ?oldValue4} . BIND(now() AS ?now)}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/observations"
+				},
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				},
+				"probe1": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.1"
+				},
+				"value1": {
+					"type": "literal",
+					"value": 1.0
+				},
+				"probe2": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.2"
+				},
+				"value2": {
+					"type": "literal",
+					"value": 2.0
+				},
+				"probe3": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.3"
+				},
+				"value3": {
+					"type": "literal",
+					"value": 3.0
+				},
+				"probe4": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0000.2.4"
+				},
+				"value4": {
+					"type": "literal",
+					"value": 4.0
+				}
+			}
+		}
+	},
+	"extended": {
+		"app": "TSX1_MONITORING",
+		"devices": {
+			"urn:epc:id:gid:0000.1.0": {
+				"modbus": {
+					"ip": "128.116.141.5",
+					"port": 60000,
+					"id": 247,
+					"sleep": 5000
+				},
+				"graph": "http://demo/observations",
+				"foi": "urn:epc:id:gid:13101974.0.0",
+				"sensors": [
+					"urn:epc:id:gid:0000.2.1",
+					"urn:epc:id:gid:0000.2.2",
+					"urn:epc:id:gid:0000.2.3",
+					"urn:epc:id:gid:0000.2.4"
+				]
+			}
+		}
+	}
+}

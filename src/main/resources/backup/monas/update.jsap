@@ -1,0 +1,25 @@
+{
+	"updates": {
+		"UPDATE_OBSERVATION": {
+			"sparql": "WITH ?graph DELETE {?obs rdf:type sosa:Observation;  sosa:hasFeatureOfInterest ?urn ; sosa:resultTime ?nowX ; sosa:hasResult ?resX ; sosa:observedProperty ?prop . ?resX rdf:type qudt:QuantityValue ; qudt:unit unit:DEG_C ; qudt:numericValue ?valueX} INSERT {_:obs rdf:type sosa:Observation;  sosa:hasFeatureOfInterest ?urn ; sosa:resultTime ?now ; sosa:hasResult _:res ; sosa:observedProperty ?prop . _:res rdf:type qudt:QuantityValue ; qudt:unit unit:DEG_C ; qudt:numericValue ?value} WHERE {BIND(now() AS ?now) . OPTIONAL {?obs rdf:type sosa:Observation;  sosa:hasFeatureOfInterest ?urn ; sosa:resultTime ?nowX ; sosa:hasResult ?resX ; sosa:observedProperty ?prop . ?resX rdf:type qudt:QuantityValue ; qudt:unit unit:DEG_C ; qudt:numericValue ?valueX}}",
+			"forcedBindings": {
+				"urn": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:X.Y.Z"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://demo"
+				},
+				"prop": {
+					"type": "uri",
+					"value": "monas:SondaX"
+				},
+				"value" : {
+					"type" : "literal",
+					"value" : 35.6
+				}
+			}
+		}
+	}
+}

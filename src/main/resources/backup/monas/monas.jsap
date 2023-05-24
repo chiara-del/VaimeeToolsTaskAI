@@ -1,0 +1,22 @@
+{
+	"#include": [
+		"file:////host.jsap",
+		"file:////namespaces.jsap",
+		"file:////query.jsap",
+		"file:////update.jsap"
+	],
+	"oauth": {
+		"enable": true,
+		"ssl": "TLSv1.2",
+		"trustall": true,
+		"provider": "keycloak"
+	},
+	"extended": {
+		"devices": {
+			"urn:epc:id:gid:95100000.12345.400": {
+				"graph": "http://demo",
+				"sleep": 1000
+			}
+		}
+	}
+}

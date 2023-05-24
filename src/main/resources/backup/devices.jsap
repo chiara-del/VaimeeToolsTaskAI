@@ -1,0 +1,70 @@
+{
+	"namespaces": {
+		"schema": "http://schema.org/",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"alma": "http://www.almaelettronica.it/"
+	},
+	"updates": {
+		"INSERT_DEVICE": {
+			"sparql": "INSERT DATA {GRAPH ?deviceGraph {?device rdf:type alma:Device . ?device schema:name ?name} GRAPH ?placeGraph {?place alma:hasDevice ?device . ?device alma:hasPlace ?place}}",
+			"forcedBindings": {
+				"deviceGraph": {
+					"type": "uri",
+					"value" : "http://www.almaelettronica.it/device"
+				},
+				"placeGraph": {
+					"type": "uri",
+					"value" : "http://www.almaelettronica.it/place"
+				},
+				"place": {
+					"type": "uri",
+					"value": "alma:MainOffice"
+				},
+				"device": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0.1.0102030405060708090A0B0C"
+				},
+				"name": {
+					"type": "literal",
+					"value": "TSX1 demo"
+				}
+			}
+		},
+		"DELETE_DEVICE": {
+			"sparql": "DELETE {GRAPH ?deviceGraph {?device rdf:type alma:Device ; schema:name ?name} GRAPH ?placeGraph {?place alma:hasDevice ?device . ?device alma:hasPlace ?place}} WHERE {GRAPH ?placeGraph {?device alma:hasPlace ?place}}",
+			"forcedBindings": {
+			"deviceGraph": {
+					"type": "uri",
+					"value" : "http://www.almaelettronica.it/device"
+				},
+				"placeGraph": {
+					"type": "uri",
+					"value" : "http://www.almaelettronica.it/place"
+				},
+				"device": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:0.1.0102030405060708090A0B0C"
+				}
+			}
+		}
+	},
+	"queries": {
+		"DEVICES_BY_PLACE": {
+			"sparql": "SELECT * WHERE {GRAPH ?placeGraph {?place alma:hasDevice ?device} GRAPH ?deviceGraph {?device schema:name ?name}}",
+			"forcedBindings": {
+				"deviceGraph": {
+					"type": "uri",
+					"value" : "http://www.almaelettronica.it/device"
+				},
+				"placeGraph": {
+					"type": "uri",
+					"value" : "http://www.almaelettronica.it/place"
+				},
+				"place": {
+					"type": "uri",
+					"value": "alma:MainOffice"
+				}
+			}
+		}
+	}
+}

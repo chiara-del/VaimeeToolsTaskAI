@@ -1,0 +1,310 @@
+{
+	"#include": [
+		"file:////criteria.jsap.json"
+	],
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"extended": {
+		"app": "WEATHER",
+		"n": 24,
+		"bug": {
+			"current": {
+				"head": {
+					"vars": [
+						"observation",
+						"feature",
+						"property",
+						"time",
+						"result",
+						"ptime",
+						"unit",
+						"value"
+					]
+				},
+				"results": {
+					"bindings": [
+						{
+							"observation": {
+								"type": "bnode",
+								"value": "b0"
+							},
+							"feature": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter#Place"
+							},
+							"property": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter/weather/temperature"
+							},
+							"time": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-15T03:03:00Z"
+							},
+							"result": {
+								"type": "bnode",
+								"value": "b1"
+							},
+							"ptime": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-13T03:03:00Z"
+							},
+							"unit": {
+								"type": "uri",
+								"value": "http://qudt.org/vocab/unit#DegreeCelsius"
+							},
+							"value": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+								"value": "1"
+							}
+						},
+						{
+							"observation": {
+								"type": "bnode",
+								"value": "b2"
+							},
+							"feature": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter#Place"
+							},
+							"property": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter/weather/temperature"
+							},
+							"time": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-15T03:03:00Z"
+							},
+							"result": {
+								"type": "bnode",
+								"value": "b3"
+							},
+							"ptime": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-13T03:03:00Z"
+							},
+							"unit": {
+								"type": "uri",
+								"value": "http://qudt.org/vocab/unit#DegreeCelsius"
+							},
+							"value": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+								"value": "0"
+							}
+						}
+					]
+				}
+			},
+			"last": {
+				"head": {
+					"vars": [
+						"observation",
+						"feature",
+						"property",
+						"time",
+						"result",
+						"ptime",
+						"unit",
+						"value"
+					]
+				},
+				"results": {
+					"bindings": [
+						{
+							"observation": {
+								"type": "bnode",
+								"value": "b0"
+							},
+							"feature": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter#Place"
+							},
+							"property": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter/weather/temperature"
+							},
+							"time": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-15T03:03:00Z"
+							},
+							"result": {
+								"type": "bnode",
+								"value": "b1"
+							},
+							"ptime": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-13T03:03:00Z"
+							},
+							"unit": {
+								"type": "uri",
+								"value": "http://qudt.org/vocab/unit#DegreeCelsius"
+							},
+							"value": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+								"value": "0"
+							}
+						}
+					]
+				}
+			},
+			"added": {
+				"head": {
+					"vars": [
+						"observation",
+						"feature",
+						"property",
+						"time",
+						"result",
+						"ptime",
+						"unit",
+						"value"
+					]
+				},
+				"results": {
+					"bindings": [
+						{
+							"observation": {
+								"type": "bnode",
+								"value": "b0"
+							},
+							"feature": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter#Place"
+							},
+							"property": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter/weather/temperature"
+							},
+							"time": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-15T03:03:00Z"
+							},
+							"result": {
+								"type": "bnode",
+								"value": "b1"
+							},
+							"ptime": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-13T03:03:00Z"
+							},
+							"unit": {
+								"type": "uri",
+								"value": "http://qudt.org/vocab/unit#DegreeCelsius"
+							},
+							"value": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+								"value": "1"
+							}
+						},
+						{
+							"observation": {
+								"type": "bnode",
+								"value": "b2"
+							},
+							"feature": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter#Place"
+							},
+							"property": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter/weather/temperature"
+							},
+							"time": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-15T03:03:00Z"
+							},
+							"result": {
+								"type": "bnode",
+								"value": "b3"
+							},
+							"ptime": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-13T03:03:00Z"
+							},
+							"unit": {
+								"type": "uri",
+								"value": "http://qudt.org/vocab/unit#DegreeCelsius"
+							},
+							"value": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+								"value": "0"
+							}
+						}
+					]
+				}
+			},
+			"removed": {
+				"head": {
+					"vars": [
+						"observation",
+						"feature",
+						"property",
+						"time",
+						"result",
+						"ptime",
+						"unit",
+						"value"
+					]
+				},
+				"results": {
+					"bindings": [
+						{
+							"observation": {
+								"type": "bnode",
+								"value": "b0"
+							},
+							"feature": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter#Place"
+							},
+							"property": {
+								"type": "uri",
+								"value": "https://vaimee.com/meter/weather/temperature"
+							},
+							"time": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-15T03:03:00Z"
+							},
+							"result": {
+								"type": "bnode",
+								"value": "b1"
+							},
+							"ptime": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#DateTime",
+								"value": "2021-10-13T03:03:00Z"
+							},
+							"unit": {
+								"type": "uri",
+								"value": "http://qudt.org/vocab/unit#DegreeCelsius"
+							},
+							"value": {
+								"type": "literal",
+								"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+								"value": "0"
+							}
+						}
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,31 @@
+{
+	"namespaces": {
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"time": "http://www.w3.org/2006/time#",		
+		"tools": "https://sepa.vaimee.it/tools#"
+	},
+	"extended" : {
+		"interval" : 5
+	},
+	"updates": {
+		"ALARM": {
+			"sparql": "INSERT {GRAPH ?graph {_:b rdf:type tools:Alarm ; tools:code ?code ; time:inXSDDateTimeStamp ?now}} WHERE {BIND(now() AS ?now)}",
+			"forcedBindings": {
+				"code": {
+					"type": "uri",
+					"value": "tools:WatchDog"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/alarm"
+				}
+			}
+		}	
+	},
+	"queries": {
+		"WATCHDOG": {
+			"sparql": "SELECT * WHERE {?unit qudt:symbol ?symbol . GRAPH <http://www.almaelettronica.it/observation> {?observation rdf:type sosa:Observation ; rdfs:label ?label ; sosa:hasResult ?quantity ; sosa:hasFeatureOfInterest ?device . ?quantity rdf:type qudt:QuantityValue ; qudt:unit ?unit . OPTIONAL {?quantity qudt:numericValue ?value} . OPTIONAL {?observation sosa:resultTime ?timestamp}} . GRAPH <http://www.almaelettronica.it/device> {?device schema:name ?name} }"
+		}
+	}
+}

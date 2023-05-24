@@ -1,0 +1,18 @@
+{
+	"#include": [
+		"file:////host.jsap"
+	],
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"extended": {
+		"app" : "MONITOR"
+	},
+	"queries": {
+		"MONITOR": {
+			"sparql": "SELECT * WHERE {?s ?p ?o}"
+		}
+	}
+}

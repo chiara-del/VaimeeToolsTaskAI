@@ -1,0 +1,3 @@
+{
+	"#include": ["file:///localhost.jsap","file:///observations.jsap","file:///watchdog.jsap","file:///devices.jsap","file:///places.jsap"]
+}

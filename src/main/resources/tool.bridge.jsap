@@ -1,0 +1,104 @@
+{
+	"host": "dld.arces.unibo.it",
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"sparql11protocol": {
+		"protocol": "http",
+		"port": 8551,
+		"query": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"namespaces": {
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+	},
+	"sparql11seprotocol": {
+		"reconnect": true,
+		"protocol": "ws",
+		"availableProtocols": {
+			"ws": {
+				"port": 9551,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9002,
+				"path": "/secure/subscribe"
+			}
+		}
+	},	
+	"extended": {
+		"app": "BRIDGE"
+	},
+	"queries": {
+		"BRIDGE_OLD": {
+			"sparql": "SELECT * WHERE {GRAPH ?g {?s ?p ?o . BIND(URI(\"http://graph/bridge/test\") AS ?g)}}"
+		},
+		"BRIDGE": {
+			"sparql": "SELECT * WHERE {GRAPH ?g {?s ?p ?o .  BIND(<http://vaimee.it/my2sec/activities> AS ?g) }}"
+		}
+	},
+	"updates": {
+
+	    "TEST":{
+	        "sparql":"WITH ?g DELETE {?s ?p ?o}INSERT{?s ?p ?o}WHERE{OPTIONAL{?s ?p ?o}}",
+	        "forcedBindings":{
+				"g": {
+					"type": "uri",
+					"value": "<graph>"
+				},
+				"s": {
+					"type": "uri",
+					"value": "<subject>"
+				},
+				"p": {
+					"type": "uri",
+					"value": "<predicate>"
+				},
+				"o": {
+					"type": "uri",
+					"value": "<object>"
+				}
+	        }
+	    },
+
+		"BRIDGE": {
+			"sparql": "INSERT DATA {GRAPH ?g {?s ?p ?o}}",
+			"host": "dld.arces.unibo.it",
+			"sparql11protocol": {
+				"port": 8550,
+				"update": {
+					"path": "/update"
+				}
+			},
+			"forcedBindings": {
+				"g": {
+					"type": "uri",
+					"value": "<graph>"
+				},
+				"s": {
+					"type": "uri",
+					"value": "<subject>"
+				},
+				"p": {
+					"type": "uri",
+					"value": "<predicate>"
+				},
+				"o": {
+					"type": "uri",
+					"value": "<object>"
+				}
+			}
+		}
+	}
+}

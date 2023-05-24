@@ -1,0 +1,28 @@
+{
+	"queries": {
+		"SUPERSET_DASHBOARD_URL": {
+			"sparql": "SELECT * FROM <http://demo> WHERE {?foi monas:dashboardUrl ?dashboard}",
+			"forcedBindings": {
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				}
+			}
+		}
+	},
+	"updates": {
+		"SUPERSET_DASHBOARD_URL": {
+			"sparql": "WITH <http://demo> DELETE {?foi monas:dashboardUrl ?old} INSERT {?foi monas:dashboardUrl ?dashboard} WHERE {OPTIONAL{?foi monas:dashboardUrl ?old}}",
+			"forcedBindings": {
+				"foi": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:13101974.0.0"
+				},
+				"dashboard": {
+					"type": "literal",
+					"value": "dashboardId"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,115 @@
+{
+	"host": "jenaengine",
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+    "sparql11protocol": {
+		"protocol": "http",
+		"port": 8000,
+		"query": {
+			"path": "/query",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/update",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"sparql11seprotocol": {
+		"protocol": "ws",
+		"availableProtocols": {
+			"ws": {
+				"port": 9000,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9443,
+				"path": "/secure/subscribe"
+			}
+		}
+	},
+	"namespaces": {
+
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"xsd": "http://www.w3.org/2001/XMLSchema#",
+		"owl": "http://www.w3.org/2002/07/owl#",
+		"time":"http://www.w3.org/2006/time#",
+		"my2sec": "http://www.vaimee.it/ontology/my2sec#"
+
+	},
+	"extended": {
+		"app": "TASK_AGGREGATOR"
+	},
+	"updates": {
+		"REMOVE_ACTIVITY":{
+			"sparql":"DELETE {GRAPH <http://vaimee.it/my2sec/activities> {?activity ?p ?o ; my2sec:hasTimeInterval ?d . ?d ?p1 ?o1} } WHERE{ GRAPH <http://vaimee.it/my2sec/activities> {?activity ?p ?o ; my2sec:hasTimeInterval ?d . ?d ?p1 ?o1}}",
+			"forcedBindings": {
+				"activity": {
+					"type": "uri",
+					"value": "urn:uuid:ActivityX"
+				}
+			}
+		},
+		"SET_SYNCHRONIZATION_FLAG":{
+			"sparql":"INSERT {GRAPH <http://www.vaimee.it/my2sec/flags> {?flag rdf:type ?flag_type ; my2sec:hasMember ?usergraph ; time:inXSDDateTimeStamp ?now}} WHERE{BIND(now() as ?now) BIND(UUID() AS ?flag)}",
+			"forcedBindings": {
+				"flag_type": {
+					"type": "uri",
+					"value": "http://www.vaimee.it/my2sec/awproducerflag"
+				},
+				"usergraph": {
+					"type": "uri",
+					"value": "http://www.vaimee.it/my2sec/admin@vaimee.it"
+				}
+			}
+		},
+		"RESET_SYNCHRONIZATION_FLAG":{
+			"sparql":"DELETE {GRAPH <http://www.vaimee.it/my2sec/flags> {?flag ?p ?o}} WHERE{GRAPH <http://www.vaimee.it/my2sec/flags> {?flag ?p ?o}}",
+			"forcedBindings": {
+				"flag": {
+					"type": "uri",
+					"value": "http://www.vaimee.it/my2sec/urn:id:1234"
+				}
+			}
+		},
+		"LOG_TIME":{
+			"sparql":"INSERT {GRAPH <http://www.vaimee.it/my2sec/logtime> { ?b rdf:type my2sec:Logtime; my2sec:hasMember ?usergraph; my2sec:hasTask ?task_uri; time:inXSDDateTimeStamp ?now; my2sec:hasTimeInterval _:d . _:d rdf:type time:Duration; time:unitType time:unitSecond ; time:numericDuration ?log_time }} WHERE{ BIND(now() as ?now) BIND(UUID() AS ?b) }",
+			"forcedBindings": {
+				"usergraph": {
+					"type": "uri",
+					"value": "http://www.vaimee.it/my2sec/defuser@vaimee.it"
+				},
+				"task_uri": {
+					"type": "uri",
+					"value": "urn:id:1234"
+				},
+				"log_time": {
+					"type": "literal",
+					"value": "2.5"
+				}
+			}
+		}
+	},
+	"queries": {
+		"ALL_OP_TASKS":{
+            "sparql":"SELECT * WHERE {GRAPH <http://www.vaimee.it/projects#> { ?bnode rdf:type my2sec:Task; my2sec:hasProject ?progetto; my2sec:taskId ?taskid; my2sec:taskTitle ?tasktitle; my2sec:hasMember ?assignee; my2sec:spentTime _:timenode . _:timenode rdf:type time:Duration; time:unitType time:unitHour ; time:numericDuration ?spent_time }}"
+        },
+		"ALL_USERS_ACTIVITIES":{
+			"sparql":"SELECT * WHERE { GRAPH <http://vaimee.it/my2sec/activities> {?nodeid rdf:type my2sec:Activity; my2sec:hasMember ?user_graph; rdf:type ?event_type; my2sec:nameApp ?app; my2sec:titleFile ?title; time:inXSDDateTimeStamp ?datetimestamp; my2sec:activityType ?activity_type; my2sec:hasTimeInterval ?timenode . ?timenode rdf:type time:Duration; time:unitType time:unitSecond ; time:numericDuration ?duration . OPTIONAL { ?nodeid my2sec:taskTitle ?task} FILTER (?event_type != my2sec:Activity)   }}"
+		},
+		"GET_SYNCHRONIZATION_FLAG":{
+			"sparql":"SELECT * WHERE {GRAPH <http://www.vaimee.it/my2sec/flags> {?flag rdf:type ?flag_type ; my2sec:hasMember ?usergraph ; time:inXSDDateTimeStamp ?timestamp}}",
+			"forcedBindings": {
+				"flag_type": {
+					"type": "uri",
+					"value": "http://www.vaimee.it/my2sec/production_finished_flag"
+				}
+			}
+		}
+    }
+}

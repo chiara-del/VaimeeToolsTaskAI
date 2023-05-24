@@ -1,0 +1,69 @@
+{
+	"host": "dld.arces.unibo.it",
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"sparql11protocol": {
+		"protocol": "http",
+		"port": 8551,
+		"query": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		},
+		"update": {
+			"path": "/sparql",
+			"method": "POST",
+			"format": "JSON"
+		}
+	},
+	"sparql11seprotocol": {
+		"reconnect": true,
+		"protocol": "ws",
+		"availableProtocols": {
+			"ws": {
+				"port": 9551,
+				"path": "/subscribe"
+			},
+			"wss": {
+				"port": 9002,
+				"path": "/secure/subscribe"
+			}
+		}
+	},
+	"namespaces": {
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"xsd": "http://www.w3.org/2001/XMLSchema#",
+		"owl": "http://www.w3.org/2002/07/owl#",
+		"time":"http://www.w3.org/2006/time#",
+
+		"jsap": "http://www.vaimee.it/ontology/jsap#",
+		"opo": "http://www.vaimee.it/ontology/opo#",
+		"sw": "http://www.vaimee.it/ontology/sw#",
+		"pac": "http://www.vaimee.it/ontology/pac#"
+    },
+	"extended": {
+		"app": "TASK_AGGREGATOR"
+	},
+	"queries": {
+		"ALL_USERS_ACTIVITIES":{
+			"sparql":"SELECT * WHERE { GRAPH <http://vaimee.it/my2sec/activities> {?nodeid rdf:type sw:Activity; sw:hasUri ?user_graph; rdf:type ?event_type; sw:nameApp ?app; sw:titleFile ?title; time:inXSDDateTimeStamp ?datetimestamp; sw:activityType ?activity_type; sw:hasTimeInterval ?duration . OPTIONAL { ?nodeid opo:taskTitle ?task} FILTER (?event_type != sw:Event)   }}"
+		},
+		"GET_SYNCHRONIZATION_FLAG":{
+        	"sparql":"SELECT * WHERE {GRAPH <http://www.vaimee.it/my2sec/flags> {?flag_uri ?p ?flag_value}}",
+        	"forcedBindings": {
+        		"flag_uri": {
+        			"type": "uri",
+        			"value": "<http://www.vaimee.it/my2sec/production_finished_flag>"
+        		}
+        	}
+        },
+        "ALL_OP_TASKS":{
+        			"sparql":"SELECT * WHERE {GRAPH <http://www.vaimee.it/projects#> { ?bnode rdf:type opo:task; opo:hasProject ?progetto; opo:taskId ?taskid; opo:taskTitle ?tasktitle; opo:Member ?assignee; opo:spentTime ?timenode .    ?timenode rdf:type opo:hour; rdf:value ?spentTimeValue . OPTIONAL {opo:hour rdf:type ?tipo .} }}"
+        }
+	},
+	"updates": {}
+}

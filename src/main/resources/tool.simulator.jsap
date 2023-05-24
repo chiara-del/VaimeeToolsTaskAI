@@ -1,0 +1,57 @@
+{
+	"#include": [
+		"file:////host.jsap",
+		"file:////observations.jsap",
+		"file:////places.jsap",
+		"file:////devices.jsap",
+		"file:////namespaces.jsap"
+	],
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"provider": "keycloak"
+	},
+	"extended": {
+		"app": "MONAS_SIM",
+		"devices": {
+			"urn:epc:id:gid:0000.1.0": {
+				"graph": "http://demo/observations",
+				"sleep": 5000,
+				"foi": "urn:epc:id:gid:13101974.0.0",
+				"sensors": [
+					"urn:epc:id:gid:0000.2.1",
+					"urn:epc:id:gid:0000.2.2",
+					"urn:epc:id:gid:0000.2.3",
+					"urn:epc:id:gid:0000.2.4"
+				]
+			}
+		}
+	},
+	"extended_backup": {
+		"app": "MONAS_SIM",
+		"devices": {
+			"urn:epc:id:gid:0000.1.0": {
+				"graph": "http://demo/observations",
+				"sleep": 1000,
+				"foi": "urn:epc:id:gid:13101974.0.0",
+				"sensors": [
+					"urn:epc:id:gid:0000.2.1",
+					"urn:epc:id:gid:0000.2.2",
+					"urn:epc:id:gid:0000.2.3",
+					"urn:epc:id:gid:0000.2.4"
+				]
+			},
+			"urn:epc:id:gid:0000.1.1": {
+				"graph": "http://demo/observations",
+				"sleep": 1000,
+				"foi": "urn:epc:id:gid:13101974.0.1",
+				"sensors": [
+					"urn:epc:id:gid:0000.3.1",
+					"urn:epc:id:gid:0000.3.2",
+					"urn:epc:id:gid:0000.3.3",
+					"urn:epc:id:gid:0000.3.4"
+				]
+			}
+		}
+	}
+}

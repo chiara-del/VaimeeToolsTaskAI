@@ -1,0 +1,42 @@
+{
+	"#include": [
+		"file:////host.jsap",
+		"file:////observations.jsap",
+		"file:////namespaces.jsap"
+	],
+	"extended": {
+		"app": "LOG_OBSERVATIONS",
+		"target": "mysql",
+		"logging": {
+			"liveGraph": "http://demo/observations",
+			"sepa": {
+				"historyGraph": "http://demo/history"
+			},
+			"mysql": {
+				"client_id": "supermonas",
+				"client_secret": "Vaimee2021!",
+				"url": "sepa.vaimee.it:3306",
+				"db": "monas",
+				"table": "observations"
+			}
+		}
+	},
+	"oauth": {
+		"enable": false,
+		"ssl": "TLSv1.2",
+		"registration": {
+			"endpoint": "https://sepa.vaimee.it:9443/auth/realms/MONAS/clients-registrations/default",
+			"initialAccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI4Y2E2ZGNiNC1jZmY5LTQzNGUtODNhNi05NTk4MzQ1NjUxZGMifQ.eyJleHAiOjAsImlhdCI6MTYwMTkxMjY3MCwianRpIjoiNzkwZTViMmEtNzU2YS00MThhLWJhMTEtODY4YjMwMTFjMGU4IiwiaXNzIjoiaHR0cHM6Ly9zZXBhLnZhaW1lZS5pdDo4NDQzL2F1dGgvcmVhbG1zL01PTkFTIiwiYXVkIjoiaHR0cHM6Ly9zZXBhLnZhaW1lZS5pdDo4NDQzL2F1dGgvcmVhbG1zL01PTkFTIiwidHlwIjoiSW5pdGlhbEFjY2Vzc1Rva2VuIn0.Rxo7hmiCBb3v5gagF32OUb39aPG4N2b5RYoRsLx8EDY",
+			"username": "demo"
+		},
+		"authentication": {
+			"endpoint": "https://sepa.vaimee.it:9443/auth/realms/MONAS/protocol/openid-connect/token",
+			"client_id": "QJNcgsl8SZ6b9xZl3CKuUJQ7kcHmHBQJJA0wxAztqypVUww1n0of58fY1OdIEmde",
+			"client_secret": "C51XUxcY2WZ/nEdMNcG4U/sfrJsYR8L+MCalKiId9ScKGh9fl/LDdA8SUeSlkaIZ",
+			"jwt": "xabtQWoH8RJJk1FyKJ78J3jaFqpRDQjXEwGovBZ5+1k3fauyBMvMa0G6pVNKIgd3RW7j9eVUrUqXtbQ0rncYstZhGVz6qwczswA9VHaZfFSwTnS0kbuhHWQzTYAjuNdW2XR3o3pvogn/Og2yVDEcuxwrEurf2jVJtAQ5Pfd5lkMuUlO1+4H3pE6wcB5+NbkRhfcKw4zza2GvmB7AhKtodM6RcIT0wM0i/OW9TzJVE0TqgOpSPpdB14CVY10ENG+ctrdBJTCX64rN8CZXcGTqUA6bPE4zeU964rb4tt7/k70WxXDaVlg8NyVHFIQr3PbkDzuEEbs7/uK6SPHsoAeOqV2DeE0to1mPE2/+KLaRpZXikRj3Ydx66ZZqaAuqDDEBZWh+fXL7SKqT60HmzX3agZ41CdOeVzR/ArG3dAvcg1wwKYxfJIXfmZ728rSY/B/ooELkc5Rvm9SKp7cqipGgqEPRFmLS+oBI0iB0gO3poCV5ec89L9aFd7hTGLFI/MBZKFILH/Eye0imaE0056JZKx8Vk6LdOFJKkwEiM8R1hhFW/tMQE7tcQPypoRm3vcxN+gHnD+XZzhR2g7jBQNfzxjWgYd97MnJY9UD3TcrY/ZKo+3iKcXL2U+0N52wLbGndiVgJG2spTDaOlEhOsOon5RstofmBHCejifC2MgFeJIRPPb05Ux8W0qg7wT3IsRJM2aDF6pqSyO+N7MEnRSq8n1DCMlFA0qVFh1CMFC+5v9fZ0AtP0VRz9DHg24kheqIAo2gOrJR3PSiSCs5yD63rOq7V/yrp+Yy2sExs4Q2A5njZCUxqSgJmdVwMoJ1uD6J0zJ3g8eetCWloMPTyxcPgt5+rYKLkRmLfu4gy+3PkxouXFsFnAJLGMYr5zFb188qPBtSAZBmif9GMd+qvidY5yrAlnvXNcQAfDDvdIYCokfaoQqz0+QKGNZ1gcukGYTgf16p71qHKd3DtaiiFEMMS3aZJfAbD0t3isMFhSlZslKSHrxvSqam1sYXbAK59rVOcptcMLb7+e1jhTBcd3bNU7ZRkhpFZCE9OdM139Pe3GYWzv5alfXi4pEbq/zzUPfuuYyFtX7vif9ctyc/q+Iu2TmgVZOKlCszTrLTAM+KtQVRXzg41UvMZdYcZuc0NTh+rSdjqNKt1AiQSey/GFPIND2IvlJif1QVBeGgqk5dqNUlxnPTp8Y5Cv1kZ0My6DO9o44zH9ZBlUTfDeRk9CQyetOwB0/MzK3etlzIzszp/o8FNJbrg9tKy9z1ttUEPNCX891w2j6zwZcD/6v7HK45xPFZvdlqa92lj0fOyQNF9B8fnwCs1iDEyLCcWKILgwjY4sE7HgvD1GYlhdC99i1CeJJSv1hyAsUue8r8eCpknFqln41ssPr0dfhzc1X3igR4jeo5+dKzYXY97rdhQkUMVYGcFP9l4o5jXenNRqfYuKSpuQlOAEUNcqUmW9V5w8aBGYnGYy6QCYZk7eu2FBbL3R81GlHmY+UgjbJV+8PTT5oTKgX4rE76sqsAcW64f16rPNx7Ii9MdKwsrD5YoG3W1um1Yz7ecvFAHJVBlYj3pgh+0M/mpWpW9J6g7v4jhdxkUQiOYNCXfTlp/JbOW0KVxsleRxiMXox+h0ZODsC81dwps7PZ3RF8i3DBdi79ejseHTG4343ZEtNOHBnmZOIrtDGZfPx1KdsgZLOmH1kB9isGxFdZvpartIDB3dG7eTpD3SzIK2VVcFIB0mjUuRZJDbLnzCQl9oPoYbYq7nUuuVGGKqQQEvAqvsuSh3/rz/nUVvBlqqdKGQwou9ApFahI2+45mFTWgBXmP221UASb/6EyIiybI8hFnnXMAqov2LjrJWpTbirbJiKtlTG7DHZyFHzP33KAp4yZlvgsyevSuT8g=",
+			"expires": "cwQcRftuWNkAkC1w7hbpoA==",
+			"type": "XPrHEX2xHy+5IuXHPHigMw=="
+		},
+		"provider": "keycloak"
+	}
+}

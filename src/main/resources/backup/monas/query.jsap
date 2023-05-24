@@ -1,0 +1,17 @@
+{
+	"queries": {
+		"OBSERVATIONS": {
+			"sparql": "SELECT ?prop ?value ?timestamp FROM ?graph WHERE {?obs rdf:type sosa:Observation;  sosa:hasFeatureOfInterest ?urn ; sosa:resultTime ?timestamp ; sosa:hasResult ?res ; sosa:observedProperty ?prop . ?res rdf:type qudt:QuantityValue ; qudt:unit unit:DEG_C ; qudt:numericValue ?value}",
+			"forcedBindings": {
+				"urn": {
+					"type": "uri",
+					"value": "urn:epc:id:gid:X.Y.Z"
+				},
+				"graph": {
+					"type": "uri",
+					"value": "http://demo"
+				}
+			}
+		}
+	}
+}

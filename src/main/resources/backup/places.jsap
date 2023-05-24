@@ -1,0 +1,106 @@
+{
+	"namespaces": {
+		"schema": "http://schema.org/",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"sosa": "http://www.w3.org/ns/sosa/",
+		"qudt": "http://qudt.org/schema/qudt#",
+		"unit": "http://qudt.org/vocab/unit#",
+		"time": "http://www.w3.org/2006/time#",
+		"wgs84_pos": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+		"gn": "http://www.geonames.org/ontology#",
+		"alma": "http://www.almaelettronica.it/"
+	},
+	"updates": {
+		"DELETE_PLACE": {
+			"sparql": "WITH ?graph DELETE {?place rdf:type schema:Place; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?lon} WHERE {?place rdf:type schema:Place ; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?lon}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/place"
+				},
+				"place": {
+					"type": "uri",
+					"value": "alma:MainOffice"
+				}
+			}
+		},
+		"INSERT_PLACE": {
+			"sparql": "INSERT {GRAPH ?graph {?place rdf:type schema:Place; schema:name ?name ;  schema:GeoCoordinates _:coordinate . _:coordinate schema:latitude ?lat ; schema:longitude ?lon}} WHERE {}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/place"
+				},
+				"place": {
+					"type": "uri",
+					"value": "alma:MainOffice"
+				},
+				"name": {
+					"type": "literal",
+					"value": "AlmaElettronica"
+				},
+				"lat": {
+					"type": "literal",
+					"value": "44.4597",
+					"datatype": "xsd:decimal"
+				},
+				"lon": {
+					"type": "literal",
+					"value": "11.1698",
+					"datatype": "xsd:decimal"
+				}
+			}
+		},
+		"LINK_PLACES": {
+			"sparql": "INSERT DATA { GRAPH <http://wot.arces.unibo.it/context> {?root schema:containsPlace ?child . ?child schema:containedInPlace ?root }}",
+			"forcedBindings": {
+				"root": {
+					"type": "uri",
+					"value": "http://a.uri/rootPlace"
+				},
+				"child": {
+					"type": "uri",
+					"value": "http://a.uri/childPlace"
+				}
+			}
+		},
+		"DELETE_LINK_PLACES": {
+			"sparql": "DELETE DATA { GRAPH <http://wot.arces.unibo.it/context> {?root schema:containsPlace ?child . ?child schema:containedInPlace ?root }}",
+			"forcedBindings": {
+				"root": {
+					"type": "uri",
+					"value": "http://a.uri/rootPlace"
+				},
+				"child": {
+					"type": "uri",
+					"value": "http://a.uri/childPlace"
+				}
+			}
+		}
+	},
+	"queries": {
+		"PLACES": {
+			"sparql": "SELECT * WHERE {GRAPH?graph {?place rdf:type schema:Place ; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?long}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/place"
+				}
+			}
+		},
+		"CONTAINED_PLACES": {
+			"sparql": "SELECT * WHERE {GRAPH?graph {?place rdf:type schema:Place ; schema:containedInPlace ?root ; schema:name ?name ;  schema:GeoCoordinates ?coordinate . ?coordinate schema:latitude ?lat ; schema:longitude ?long}}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://www.almaelettronica.it/place"
+				},
+				"root": {
+					"type": "uri",
+					"value": "http://a.uri/rootPlace"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"queries": {
+		"LOGGER": {
+			"sparql": "SELECT ?urn ?foi ?timestamp ?value FROM ?graph WHERE {?obs rdf:type sosa:Observation; sosa:madeBySensor ?urn ; sosa:hasFeatureOfInterest ?foi ; sosa:resultTime ?timestamp ; sosa:hasSimpleResult ?value}",
+			"forcedBindings": {
+				"graph": {
+					"type": "uri",
+					"value": "http://demo/observations"
+				}
+			}
+		}
+	},
+	"extended": {
+		"app": "LOG_OBSERVATIONS",
+		"target": "mysql",
+		"logging": {
+			"liveGraph": "http://demo/observations",
+			"sepa": {
+				"historyGraph": "http://demo/history"
+			},
+			"mysql": {
+				"client_id": "monas",
+				"client_secret": "Vaimee@Monas2022!",
+				"url": "mysql.monas.vaimee.it:3306",
+				"db": "monas",
+				"table": "observations"
+			}
+		}
+	}
+}
