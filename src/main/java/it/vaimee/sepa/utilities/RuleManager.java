@@ -47,10 +47,13 @@ public class RuleManager {
         //String my2secUPDATED = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\my2secOWLxml.owl";
         String my2secUPDATED2 = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\PROVAAA.owl"; //quì ho provato a specificare nella label di member il rdfs: Litteral
         String my2secPROVA = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\PROVADISTRUTTIBILE.owl";
+        String my2secPROVA2 = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\PROVA.DISTRUTTIBILE.ULTIMA.VERSIONE.owl"; //questa dovrebbe essere la versione finita
 
+        String my2secVERO = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\TESI TESI\\ONTOLOGIA\\my2secOWL.owl";
+        String my2secVEROFunctional = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\TESI TESI\\ONTOLOGIA\\my2secOWLFunctional.owl";
 
         Logging.logger.info("Importing ontology");
-        Optional<String> owlFilename = Optional.of(my2secPROVA);
+        Optional<String> owlFilename = Optional.of(my2secVEROFunctional);
         Optional<File> owlFile = (owlFilename != null && owlFilename.isPresent()) ? Optional.of(new File(owlFilename.get())) : Optional.<File>empty();
 
         try{
@@ -69,16 +72,29 @@ public class RuleManager {
 
         try {
             result = queryEngine.runSQWRLQuery("Activity to Task w/ subtask");
-            if (result.next())
-                if(result.hasLiteralValue("M")){
-                    System.out.println("Found literal");
-                }else{
-                    System.out.println("M is NOT a literal");
+            while(result.next()){
+                System.out.println("Member: " + result.getNamedIndividual("M"));
+                // System.out.println("Member: " + result.getLiteral("M"));
+                System.out.println("Activity: " + result.getNamedIndividual("AV"));
+                System.out.println("Task: " + result.getNamedIndividual("T"));
+            }
+            /*if (result.next())*/
+                /*if(result.hasLiteralValue("M")){
+                    System.out.println("Found Literal");
+                }else {
+                    System.out.println("M is NOT a Literal");
                 }
-                System.out.println("Member: " + result.getLiteral("M").getString());
-                System.out.println("Member: " + result.getLiteral("M"));
-                System.out.println("Activity: " + result.getLiteral("AV").getString());
-                System.out.println("Task: " + result.getLiteral("T").getString());
+                if(result.hasNamedIndividualValue("M")){
+                    System.out.println("Found Named Individual");
+                }else{
+                    System.out.println("M is NOT a Named Individual");
+                }
+                if(result.hasClassValue("M")){
+                    System.out.println("Found Class (uri)");
+                }else{
+                    System.out.println("M is NOT a Class (uri)");
+                }*/
+
                 //System.out.println("Activity: " + result.getLiteral("size").getInteger());
         } catch (SQWRLException e) {
             throw new RuntimeException(e);
