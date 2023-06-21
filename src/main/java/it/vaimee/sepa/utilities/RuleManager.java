@@ -1,39 +1,60 @@
 package it.vaimee.sepa.utilities;
 
+//UTILS
 import it.unibo.arces.wot.sepa.logging.Logging;
-
 import java.io.File;
 import java.util.Optional;
 
-//da qua sto aggiungendo
-import org.checkerframework.checker.nullness.qual.NonNull;
+//Ontology
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.model.IRI;
-import org.swrlapi.sqwrl.SQWRLQueryEngine;
-//import org.swrlapi.core.SWRLRuleEngine;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+
+//Engine
 import org.swrlapi.factory.SWRLAPIFactory;
-
-
-//PROVO AD AGGIUNGERE QUESTE COSE 24/05/2023
-import org.swrlapi.core.SWRLRuleEngine;
-import org.swrlapi.exceptions.SWRLBuiltInException;
-import org.swrlapi.exceptions.SWRLRuleEngineException;
-import org.swrlapi.parser.SWRLParseException;
+import org.swrlapi.sqwrl.SQWRLQueryEngine;
 import org.swrlapi.sqwrl.exceptions.SQWRLException;
-import org.swrlapi.core.SWRLAPIRule;
 import org.swrlapi.sqwrl.SQWRLResult;
-import org.swrlapi.sqwrl.SQWRLResultGenerator;
-//import org.swrlapi.sqwrl.SQWRLResultHandler;
-import org.swrlapi.sqwrl.exceptions.SQWRLException;
-//FINO A QUA
+import org.swrlapi.parser.SWRLParseException;
 
 
-import org.swrlapi.exceptions.*;
-import org.swrlapi.sqwrl.exceptions.*;
-import org.swrlapi.core.SWRLAPIRule;
+//Data
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+
+
+//import static org.semanticweb.owlapi.apibinding.OWLFunctionalSyntaxFactory.*;
+
+import org.semanticweb.owlapi.apibinding.OWLFunctionalSyntaxFactory;
+
+
 public class RuleManager {
+    /*public class OWL2RLIT extends IntegrationTestBase{
+        //boh
+    }*/
+
+// classi
+    private OWLClass member;
+    private OWLClass activityType;
+    private OWLClass activity;
+
+    private OWLClass task;
+
+    //OBJ PROP
+    private OWLObjectProperty attachedTo;
+    private OWLObjectProperty hasActivityType;
+    private OWLObjectProperty hasMember;
+    private OWLObjectProperty hasTask;
+
+    //INDIVIDUAL
+    private OWLNamedIndividual individualTask;
+    private OWLNamedIndividual activityTypeIndividual;
+    private OWLNamedIndividual individual;
+    private OWLNamedIndividual activity1;
+
 
     private OWLOntologyManager ontologyManager;
     private OWLOntology ontology;
@@ -56,20 +77,81 @@ public class RuleManager {
         Optional<String> owlFilename = Optional.of(my2secVEROFunctional);
         Optional<File> owlFile = (owlFilename != null && owlFilename.isPresent()) ? Optional.of(new File(owlFilename.get())) : Optional.<File>empty();
 
+        //ON CREATION
+        //final OWLClass C = Class(iri("Member"));
+        //final OWLNamedIndividual I = NamedIndividual(iri("Simone"));
+        //OWLFunctionalSyntaxFactory.IRI
         try{
             // Create an OWL ontology using the OWLAPI
             ontologyManager = OWLManager.createOWLOntologyManager();
             ontology = owlFile.isPresent() ? ontologyManager.loadOntologyFromOntologyDocument(owlFile.get()) : ontologyManager.createOntology();
         } catch (OWLOntologyCreationException e) {
-            throw new RuntimeException(e); //ottimizza  sto fatto
+            throw new RuntimeException(e);
         }
+
+
+
+        //ON RUNTIME
 
         // Create SQWRL query engine using the SWRLAPI
         SQWRLQueryEngine queryEngine = SWRLAPIFactory.createSQWRLQueryEngine(ontology);
-        // questo pezzo funzionava ma sto facendo delle prova
+
+        //dichiaro le classi
+        member = OWLFunctionalSyntaxFactory.Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Member"));
+        task = OWLFunctionalSyntaxFactory.Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Task"));
+        activity = OWLFunctionalSyntaxFactory.Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Activity"));
+        activityType = OWLFunctionalSyntaxFactory.Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#ActivityType"));
+
+        //dichiaro le obj
+        attachedTo = OWLFunctionalSyntaxFactory.ObjectProperty(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#attachedTo"));
+        hasActivityType = OWLFunctionalSyntaxFactory.ObjectProperty(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#hasActivityType"));
+        hasMember = OWLFunctionalSyntaxFactory.ObjectProperty(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#hasMember"));
+        hasTask = OWLFunctionalSyntaxFactory.ObjectProperty(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#hasTask")); //questa l'ho creata ma dovrebbe dedurla la rule
+
+        //dichiaro gli individui delle classi
+        individualTask = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Task1"));
+        individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#chiara"));
+        activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Developing"));
+        activity1 = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#activity1"));
+
+
+        //assiomi
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(task,individualTask));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(member,individual));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(activityType,activityTypeIndividual));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(activity,activity1));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,individualTask,activityTypeIndividual));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,activity1,activityTypeIndividual));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasMember,activity1,individual));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(attachedTo,individualTask,individual));
+
+
+
+        //addAxiom()
+        //-------------17/06 provo a fare add axiom di nuovo
+
+        //final OWLClass C = Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Member"));
+
+        //final OWLNamedIndividual Task = OWLNamedIndividual.class(C).asOWLObjectProperty();
+
+
+        //final OWLDataProperty OBJ = OWLDataProperty.createObjectProperty();
+        //final OWLNamedIndividual S = OWLNamedIndividual.createIndividual("chiara");
+        //addOWLAxioms(ontology, ClassAssertion(C, I));
+
+        /*
+        final OWLClass MemberClass = Class(IRI("http://vaimee.com/My2Sec#Member"));
+        final OWLNamedIndividual Chiara = createIndividual();
+
+
+        addOWLAxioms(ontology, ClassAssertion(MemberClass, Chiara));
+        while(MemberClass.asOWLNamedIndividual().next()) {
+            System.out.println("Member: " + OWLNamedIndividual.class.getCanonicalName());
+        }
+        */
+
 
         SQWRLResult result;
-
         try {
             result = queryEngine.runSQWRLQuery("Activity to Task w/ subtask");
             while(result.next()){
@@ -78,22 +160,8 @@ public class RuleManager {
                 System.out.println("Activity: " + result.getNamedIndividual("AV"));
                 System.out.println("Task: " + result.getNamedIndividual("T"));
             }
-            /*if (result.next())*/
-                /*if(result.hasLiteralValue("M")){
-                    System.out.println("Found Literal");
-                }else {
-                    System.out.println("M is NOT a Literal");
-                }
-                if(result.hasNamedIndividualValue("M")){
-                    System.out.println("Found Named Individual");
-                }else{
-                    System.out.println("M is NOT a Named Individual");
-                }
-                if(result.hasClassValue("M")){
-                    System.out.println("Found Class (uri)");
-                }else{
-                    System.out.println("M is NOT a Class (uri)");
-                }*/
+
+        //Assert.assertTrue(result.next());
 
                 //System.out.println("Activity: " + result.getLiteral("size").getInteger());
         } catch (SQWRLException e) {
@@ -110,51 +178,6 @@ public class RuleManager {
             System.out.println("number: " + result.getLiteral("size").getInteger());
         }
         */
-
-
-    /*
-        // Create OWLOntology instance using the OWLAPI
-        Logging.logger.info("Importing ontology");
-        OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
-        OWLOntology ontology;
-        try{
-            ontology = ontologyManager.loadOntologyFromOntologyDocument(new File("C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\my2sec_ontology_formatted_for_drools_by_GG.owl"));
-        } catch (OWLOntologyCreationException e) {
-            throw new RuntimeException(e); //ottimizza  sto fatto
-        }
-
-        String stringa= ontology.getOntologyID().toString();
-        Logging.logger.info("Ontology ID: "+stringa);
-
-
-
-        // Create a SWRL rule engine using the SWRLAP
-        //SWRLRuleEngine swrlRuleEngine = SWRLAPIFactory.createSWRLRuleEngine(ontology);
-        SQWRLQueryEngine queryEngine = SWRLAPIFactory.createSQWRLQueryEngine(ontology);
-    */
-
-
-        // Create an OWLOntologyManager
-        /*
-        manager = OWLManager.createOWLOntologyManager();
-        // Load an OWL ontology from IRI
-        // IRI iri = IRI.create("https://raw.githubusercontent.com/vaimee/my2sec/main/0_Ontologies/src/owl/my2sec.ttl");
-        try {
-            ontology = manager.loadOntologyFromOntologyDocument(new File("C:\\Users\\chiar\\IdeaProjects\\VaimeeTools_taskai\\tools\\src\\main\\java\\it\\vaimee\\sepa\\utilities\\my2sec_ontology.ttl")); //iri);
-        } catch (OWLOntologyCreationException e) {
-            throw new RuntimeException(e); //ottimizza  sto fatto
-        }
-
-        try {
-            ruleEngine = SWRLAPIFactory.createSWRLRuleEngine(ontology);
-        } catch (SWRLRuleEngineException e) {
-            throw new RuntimeException(e); //ottimizza  sto fatto
-        }
-         */
-
-
-
-
     }
 
     public void parseRule(){
