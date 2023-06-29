@@ -1,5 +1,5 @@
 {
-	"host": "host.docker.internal",
+	"host": "dld.arces.unibo.it",
 	"oauth": {
 		"enable": false,
 		"ssl": "TLSv1.2",
@@ -7,7 +7,7 @@
 	},
     "sparql11protocol": {
 		"protocol": "http",
-		"port": 8667,
+		"port": 8668,
 		"query": {
 			"path": "/query",
 			"method": "POST",
@@ -23,7 +23,7 @@
 		"protocol": "ws",
 		"availableProtocols": {
 			"ws": {
-				"port": 9667,
+				"port": 9668,
 				"path": "/subscribe"
 			},
 			"wss": {
@@ -46,6 +46,69 @@
 		"app": "TASK_AGGREGATOR"
 	},
 	"updates": {
+        "ADD_TASK":{
+            "sparql":"INSERT { GRAPH <http://www.vaimee.it/projects#> { ?b rdf:type my2sec:Task ; my2sec:hasProject ?projecturi ; my2sec:taskId ?task_id ; my2sec:taskTitle ?task_title ; my2sec:hasMember ?assignee ; my2sec:spentTime ?timenode . ?timenode rdf:type time:Duration; time:unitType time:unitHour ; time:numericDuration ?spent_time }} WHERE {BIND(UUID() AS ?b) BIND(UUID() AS ?timenode)}",
+            "forcedBindings": {
+                "projecturi": {
+                    "type": "uri",
+                    "value": "http://www.vaimee.it/projects#demo-project"
+                },
+                "task_id": {
+                    "type": "literal",
+                    "value": 1,
+                    "datatype": "xsd:integer"
+                },
+                "task_title": {
+                    "type": "uri",
+                    "value": "ATaskTitle"
+                },
+                "assignee": {
+                    "type": "uri",
+                    "value": "http://www.vaimee.it/members/gregorio.monari@gmail.com"
+                },
+                "spent_time": {
+                    "type": "literal",
+                    "value": "PT0S"
+                }
+            }
+        },
+        "ADD_ACTIVITY":{
+            "sparql":"INSERT {GRAPH <http://vaimee.it/my2sec/activities> {?b rdf:type my2sec:Activity ; my2sec:hasMember ?usergraph; rdf:type ?event_type; my2sec:nameApp ?app; my2sec:titleFile ?title; time:inXSDDateTimeStamp ?datetimestamp; my2sec:activityType ?activity_type; my2sec:taskTitle ?task; my2sec:hasTimeInterval ?timenode . ?timenode rdf:type time:Duration; time:unitType time:unitSecond ; time:numericDuration ?duration }} WHERE {BIND(UUID() AS ?b) BIND(UUID() AS ?timenode)}",
+            "forcedBindings": {
+                "usergraph": {
+                    "type": "uri",
+                    "value": "http://www.vaimee.it/my2sec/defuser@vaimee.it"
+                },
+                "event_type": {
+                    "type": "uri",
+                    "value": "my2sec:windowEvent"
+                },
+                "datetimestamp": {
+                    "type": "literal",
+                    "value": "2022-08-10T15:33:42.503000+00:00"
+                },
+                "app": {
+                    "type": "literal",
+                    "value": "chrome.exe"
+                },
+                "title": {
+                    "type": "literal",
+                    "value": "Portainer"
+                },
+                "activity_type": {
+                    "type": "uri",
+                    "value": "my2sec:Developing"
+                },
+                "task": {
+                    "type": "literal",
+                    "value": "WP2-IMPLEMENTAZIONE COMPONENTI"
+                },
+                "duration": {
+                    "type": "literal",
+                    "value": "16.0"
+                }
+            }
+        },
 		"REMOVE_ACTIVITY":{
 			"sparql":"DELETE {GRAPH <http://vaimee.it/my2sec/activities> {?activity ?p ?o ; my2sec:hasTimeInterval ?d . ?d ?p1 ?o1} } WHERE{ GRAPH <http://vaimee.it/my2sec/activities> {?activity ?p ?o ; my2sec:hasTimeInterval ?d . ?d ?p1 ?o1}}",
 			"forcedBindings": {

@@ -52,13 +52,13 @@ public class ActivityConsumer extends Consumer {
     }
 
     //SOLO PER DEBUGGING POI LEVALA
-    /*
+
     @Override
     public void onFirstResults(BindingsResults results){
         //Logging.logger.info("RECEIVED FIRST RESULTS");
         //System.out.println(results);
         onAddedResults(results);
-    }*/
+    }
 
 
 

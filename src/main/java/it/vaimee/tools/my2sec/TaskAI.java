@@ -1,5 +1,6 @@
 package it.vaimee.tools.my2sec;
 
+import com.github.jsonldjava.core.RDFDataset;
 import it.unibo.arces.wot.sepa.commons.exceptions.SEPABindingsException;
 import it.unibo.arces.wot.sepa.commons.exceptions.SEPAPropertiesException;
 import it.unibo.arces.wot.sepa.commons.exceptions.SEPAProtocolException;
@@ -18,6 +19,7 @@ import it.vaimee.sepa.producers.my2sec.ActivityRemover;
 import it.unibo.arces.wot.sepa.pattern.GenericClient;
 import it.vaimee.sepa.producers.my2sec.FlagRemover;
 import it.vaimee.sepa.producers.my2sec.LogTimeProducer;
+import it.vaimee.sepa.utilities.RuleManager;
 import it.vaimee.tools.ITool;
 
 import java.io.IOException;
@@ -36,6 +38,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+//new Import
+import it.vaimee.sepa.producers.my2sec.FlagProducer;
+import it.vaimee.sepa.consumers.my2sec.LogTimeConsumer;
+import it.vaimee.sepa.producers.my2sec.ActivityProducer;
+import it.vaimee.sepa.producers.my2sec.TaskProducer;
+
+//import ruleManager
+import it.vaimee.sepa.utilities.RuleManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.swrlapi.sqwrl.SQWRLResult;
+import org.swrlapi.sqwrl.exceptions.SQWRLException;
+
+import javax.tools.Tool;
+import java.io.IOException;
+
+
 //THE MASTER
 public class TaskAI extends ITool {
 
@@ -48,6 +66,15 @@ public class TaskAI extends ITool {
     private LogTimeProducer logTimeProducer;
 
     private BindingsResults flag;
+    //Dichiaro
+    private TaskAI taskAI;
+    private ActivityProducer activityProducer;
+    private TaskProducer taskProducer;
+    private LogTimeConsumer logTimeConsumer;
+    private FlagProducer flagProducer;
+
+    private RuleManager ruleManager;
+
 
     public TaskAI(JSAP appProfile)
             throws SEPAProtocolException, SEPASecurityException, SEPAPropertiesException, SEPABindingsException {
@@ -98,7 +125,7 @@ public class TaskAI extends ITool {
 						
 						aggregate(userUri,activities,tasks);
 
-                        removeActivities(activities);
+                        //removeActivities(activities);
 						
 					}
 					
@@ -154,29 +181,116 @@ public class TaskAI extends ITool {
 
 
     private void aggregate(String userUri, HashMap<RDFTermURI,HashMap<RDFTermURI,Float>> activities,HashMap<RDFTermURI,HashSet<RDFTermURI>> tasks)
-            throws SEPAProtocolException, SEPASecurityException, SEPAPropertiesException, SEPABindingsException{
+            throws SEPAProtocolException, SEPASecurityException, SEPAPropertiesException, SEPABindingsException {
         Logging.logger.info("####################");
         Logging.logger.info("### AGGREGATING! ###");
         Logging.logger.info("####################");
-        Logging.logger.info("To analyze: "+tasks.size()+" tasks");
+        Logging.logger.info("To analyze: " + tasks.size() + " tasks");
+        Logging.logger.info("To analyze: " + activities.size() + " types of activities");
 
         // DA QUI IN POI STO MODIFICANDO
+        String my2secVEROFunctional = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\TESI TESI\\ONTOLOGIA\\my2secOWLFunctional.owl";
+        ruleManager = new RuleManager(my2secVEROFunctional);
 
-        // Create OWLOntology instance using the OWLAPI
-        // OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
-        // OWLOntology ontology = ontologyManager.loadOntologyFromOntologyDocument(new File("\"C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\my2sec - Copia.owl\""));
+        //public void startTest_ruleManager () {
+        Logging.logger.info("** running ruleManager Test");
+        //modifico la mail dell'utente per farla leggere a SWRL
+        int lastIndex = userUri.lastIndexOf("/");
+        String userUriTemp = userUri.substring(lastIndex + 1);
+        int index = userUriTemp.indexOf("@");
+        String leftSide = userUriTemp.substring(0, index);
+        String rightSide = userUriTemp.substring(index + 1);
+        String user_uri_parsed = leftSide + "___" + rightSide;
 
-        // Create a SWRL rule engine using the SWRLAPI
-        // SWRLRuleEngine ruleEngine = SWRLAPIFactory.createSWRLRuleEngine(ontology);
+        //aggiungo il member
+        ruleManager.add_member(user_uri_parsed);
+       /* for (RDFTermURI activity_type: tasks.keySet()) {
+            ruleManager.add_task(user_uri_parsed,activity_type.getValue(),activity_type);
+        }*/
 
-        // Create a SWRL rule
-        // SWRLAPIRule rule = ruleEngine.createSWRLRule(my2sec:attachedTo(?T, ?M) ^ my2sec:Member(?M) ^ my2sec:partOf(?S, ?T) ^ my2sec:hasActivityType(?AV, ?AT) ^ my2sec:hasActivityType(?S, ?AT) ^ my2sec:hasMember(?AV, ?M) -> sqwrl:select(?M, ?AV, ?T) ^ my2sec:hasTask(?AV, ?T) ^ sqwrl:columnNames("Member", "Activity", "Task"));
+        //con dei cicli entro negli HashMap di activities e tasks per aggiungere attività e task al ruleManager
+        //fuori sto ciclando tutti gli activitytype, quindi prendo per ogni activitytype
+        for (RDFTermURI activity_type : activities.keySet()){
+            //dentro sto prendendo per ogni activitytype e vado a ciclarre sugli uri
+            for(RDFTermURI activity_uri : activities.get(activity_type).keySet()) {
+                    Logging.logger.info("Validating: " + activity_type.getValue().toString());
+                    //capisci qua come accedere
+                    ruleManager.add_activity(user_uri_parsed, activity_uri.toString(), activity_type.toString(),activities.get(activity_type).get(activity_uri).toString());
+                    //System.out.println("activityUri:" + activity_uri.toString());
+                    //System.out.println("activityType:" + activity_type.toString());
+                    //System.out.println("duration:" + activities.get(activity_type).get(activity_uri).toString());
+            }
+        }
+        for (RDFTermURI task_type: tasks.keySet()) {
+            for(RDFTermURI task_uri : tasks.get(task_type)) {
+                ruleManager.add_task(user_uri_parsed,task_uri.toString() , task_type.toString());
+                //System.out.println("taskUri:" + task_uri.toString());
+                //System.out.println("taskType:" + task_type.toString());
+            }
+        }
+        SQWRLResult result= ruleManager.parseRule();
 
-        // Run the rule engine
-        // ruleEngine.run();
+        HashMap<RDFTermURI,Float> taskDurationCache = new HashMap<RDFTermURI,Float>();
+        try {
+            while(result.next()) {
 
-        //PROVIAMO A FARE
+                int memberNameIndex=result.getNamedIndividual("M").toString().indexOf(":");
+                String memberUri= result.getNamedIndividual("M").toString().substring(memberNameIndex+1);
+                if(memberUri.equals(user_uri_parsed)){
 
+                //GET RESULTS
+                int newIndex=result.getNamedIndividual("M").toString().indexOf(":");
+                String member_uri= result.getNamedIndividual("M").toString().substring(newIndex+1);
+                Logging.logger.trace("Member: " + member_uri);
+                // System.out.println("Member: " + result.getLiteral("M"));
+                Logging.logger.trace("Duration: " + result.getLiteral("time").getValue());
+                Logging.logger.trace("Task: " + result.getNamedIndividual("T").getIRI());
+
+                //PREPROCESS
+                String newStringifiedTask = result.getNamedIndividual("T").getIRI().toString();
+                RDFTermURI taskUri = new RDFTermURI(newStringifiedTask);
+
+                String literalDuration=result.getLiteral("time").getValue();
+                Float singleActivityDuration=Float.parseFloat(literalDuration);
+
+                //Abbiamo: uri della task associata all'attività, member, float duration
+                //user_uri, taskUri, activityDuration
+                if (!taskDurationCache.containsKey(taskUri)){ //result.getNamedIndividual("T").getIRI().equals(task_uri_duration)){
+                    //se non contiene la key, creane una nuova
+                    taskDurationCache.put(taskUri, singleActivityDuration);
+                } else {
+                    //aggiungi valore all'entry esistente
+                    float newCalculatedDuration = taskDurationCache.get(taskUri) + singleActivityDuration;
+                    taskDurationCache.put(taskUri, newCalculatedDuration);
+                }
+
+            }else{
+                    System.out.println("Ignored result for "+result.getNamedIndividual("M")+", expected: "+user_uri_parsed);
+                 }
+            }
+        } catch (SQWRLException e) {
+            throw new RuntimeException(e);
+        }
+        Logging.logger.info(taskDurationCache);
+
+        //ORA MI CICLO L'HASH MAP E PRODUCO I LOG TIMES
+        for(RDFTermURI currTaskUri: taskDurationCache.keySet()){
+            System.out.println("task uri term: "+currTaskUri);
+            System.out.println("task uri value string: "+currTaskUri.getValue());
+            //user uri, currTaskUri, taskLogTime
+            Float currTaskLogTime = taskDurationCache.get(currTaskUri);
+            Logging.logger.info(">> LOG TIME: "+currTaskLogTime+" TASK URI: "+currTaskUri);
+            Logging.logger.info("Updating log time to sepa");
+            logTimeProducer.setUpdateBindingValue("usergraph", new RDFTermURI(userUri));
+            logTimeProducer.setUpdateBindingValue("task_uri", new RDFTermURI(currTaskUri.getValue()));//new RDFTerm(task_uri.getValue()));
+            logTimeProducer.setUpdateBindingValue("log_time", new RDFTermLiteral(Float.toString(currTaskLogTime))); //new RDFTermLiteral(Float.toString(currTaskLogTime)));
+            logTimeProducer.update();
+            Logging.logger.info("UPDATED!");
+        }
+
+
+        //OLD CODE
+        /*
         for (RDFTermURI activity_type : activities.keySet()) {
             //cerca un match tra le task e le attività
             Logging.logger.info("Validating: "+activity_type.getValue());
@@ -217,7 +331,7 @@ public class TaskAI extends ITool {
                 Logging.logger.info("UPDATED!");
             }
         }//end of for()
-
+        */
     }
 
 

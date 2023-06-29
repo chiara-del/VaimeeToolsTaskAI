@@ -20,6 +20,8 @@ import it.vaimee.sepa.producers.my2sec.TaskProducer;
 
 //import ruleManager
 import it.vaimee.sepa.utilities.RuleManager;
+import org.swrlapi.sqwrl.SQWRLResult;
+import org.swrlapi.sqwrl.exceptions.SQWRLException;
 
 import javax.tools.Tool;
 import java.io.IOException;
@@ -50,12 +52,55 @@ public class TaskAITester extends ITool{
         //taskProducer = new TaskProducer(appProfile);
         //logTimeConsumer = new LogTimeConsumer(appProfile);
         //flagProducer = new FlagProducer(appProfile);
-        ruleManager= new RuleManager();
+        String my2secVEROFunctional = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\TESI TESI\\ONTOLOGIA\\my2secOWLFunctional.owl";
+        ruleManager= new RuleManager(my2secVEROFunctional);
     }
 
     public void startTest_ruleManager(){
         Logging.logger.info("** running ruleManager Test");
-        ruleManager.parseRule();
+        String user_uri="http://www.vaimee.it/my2sec/defuser@vaimee.it";
+        int lastIndex= user_uri.lastIndexOf("/");
+        user_uri=user_uri.substring(lastIndex+1);
+
+
+        int index=user_uri.indexOf("@");
+        String leftSide=user_uri.substring(0,index);
+        String rightSide=user_uri.substring(index+1);
+        //System.out.println(leftSide+"___"+rightSide);
+        String user_uri_parsed=leftSide+"___"+rightSide;
+        ruleManager.add_member(user_uri_parsed);
+        ruleManager.add_task(user_uri_parsed,"_8jdsid98ud982","http://www.vaimee.it/ontology/my2sec#Developing");
+        ruleManager.add_activity(user_uri_parsed,"_ceu8eu298euc20","http://www.vaimee.it/ontology/my2sec#Developing","15.3");
+        ruleManager.add_activity(user_uri_parsed,"_dm8328dmj928d9","http://www.vaimee.it/ontology/my2sec#Developing","32.0");
+        ruleManager.add_activity(user_uri_parsed,"_dj82i0d82mid27","http://www.vaimee.it/ontology/my2sec#Developing","18.15");
+        ruleManager.add_activity(user_uri_parsed,"_du8nndh2nu2929","http://www.vaimee.it/ontology/my2sec#Researching","443.0");
+        SQWRLResult result= ruleManager.parseRule();
+        try {
+            int total=0;
+            int pass = 0;
+            while(result.next()) {
+                int newIndex=result.getNamedIndividual("M").toString().indexOf(":");
+                String member_uri= result.getNamedIndividual("M").toString().substring(newIndex+1);
+
+                if(member_uri.equals(user_uri_parsed)){
+                    System.out.println("Member: " + member_uri);
+                    // System.out.println("Member: " + result.getLiteral("M"));
+                    System.out.println("Activity: " + result.getNamedIndividual("AV"));
+                    System.out.println("Task: " + result.getNamedIndividual("T"));
+                    //System.out.println("Duration: "+result.getObjectProperty("time"));
+                    String literalDuration=result.getLiteral("time").getValue();
+                    Float numericDuration=Float.parseFloat(literalDuration);
+                    System.out.println("the value is:"+ numericDuration.toString());
+                    // dentro pass ci devo mettere result.getDataProperty("time") però in modo tale che possa essere sommata al totale
+                    // bisogna creare delle durate da poter mettere e fare elaborale alla rule collegate all'utente
+                    total = total + pass;
+                }else{
+                    System.out.println("Ignored result for "+result.getNamedIndividual("M")+", expected: "+user_uri_parsed);
+                }
+            }
+        } catch (SQWRLException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void startTest_taskAi() throws SEPAProtocolException, SEPASecurityException, SEPAPropertiesException, SEPABindingsException{
 

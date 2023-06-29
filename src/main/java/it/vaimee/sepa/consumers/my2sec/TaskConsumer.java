@@ -36,13 +36,12 @@ public class TaskConsumer extends Consumer {
     }
 
     //TEMPORARY FOR DEBUGGING; REMOVE LATER
-    /*
     @Override
     public void onFirstResults(BindingsResults results) {
-        //System.out.println("TASKS RECEIVED!!");
+        System.out.println("TASKS RECEIVED!!");
         //System.out.println(results);
         this.onAddedResults(results);
-    }*/
+    }
 
 
     @Override
@@ -59,7 +58,7 @@ public class TaskConsumer extends Consumer {
     }
     
     private void addToCache(BindingsResults results){
-        System.out.println(results);
+       //System.out.println(results);
         //ADD ITEMS TO CACHE
         for (Bindings bindings : results.getBindings()) {
             RDFTermURI user_uri;
@@ -74,7 +73,7 @@ public class TaskConsumer extends Consumer {
                 user_uri = (RDFTermURI) bindings.getRDFTerm("assignee");
                 activity_type = (RDFTermURI) bindings.getRDFTerm("tasktitle");
                 activity_uri = (RDFTermURI) bindings.getRDFTerm("bnode");
-                System.out.println("Adding task: user"+user_uri.getValue()+" activity_type "+activity_type.getValue()+" activity_uri "+activity_uri.getValue());
+                Logging.logger.info("Add task: user"+user_uri.getValue()+" activity_type "+activity_type.getValue()+" activity_uri "+activity_uri.getValue());
             } catch (SEPABindingsException e1) {
                 Logging.logger.error(e1);
                 continue;
@@ -91,7 +90,7 @@ public class TaskConsumer extends Consumer {
             tasksByUser.get(user_uri).get(activity_type).add(activity_uri);
             //Logging.logger.info(tasksByUser.get(user_uri).get(activity_type));
         }
-        Logging.logger.info("Added tasks to cache");
+        //Logging.logger.info("Added tasks to cache");
     }
 
     private void removeFromCache(BindingsResults results){
