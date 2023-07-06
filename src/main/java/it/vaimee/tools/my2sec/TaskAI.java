@@ -46,6 +46,7 @@ import it.vaimee.sepa.producers.my2sec.TaskProducer;
 
 //import ruleManager
 import it.vaimee.sepa.utilities.RuleManager;
+import org.nfunk.jep.function.Str;
 import org.semanticweb.owlapi.model.IRI;
 import org.swrlapi.sqwrl.SQWRLResult;
 import org.swrlapi.sqwrl.exceptions.SQWRLException;
@@ -97,7 +98,12 @@ public class TaskAI extends ITool {
         activityRemover = new GenericClient(appProfile, null);//new ActivityRemover(appProfile);
         flagRemover = new FlagRemover(appProfile);
         logTimeProducer = new LogTimeProducer(appProfile);
-        
+
+
+        String ontoPath="./ontologies/my2secOWLFunctional.owl";
+        ruleManager = new RuleManager(ontoPath);
+
+
         new TaskAIThread().start();
     }
     
@@ -189,8 +195,7 @@ public class TaskAI extends ITool {
         Logging.logger.info("To analyze: " + activities.size() + " types of activities");
 
         // DA QUI IN POI STO MODIFICANDO
-        String my2secVEROFunctional = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\TESI TESI\\ONTOLOGIA\\my2secOWLFunctional.owl";
-        ruleManager = new RuleManager(my2secVEROFunctional);
+        //String my2secVEROFunctional = "C:\\Users\\chiar\\OneDrive\\Desktop\\TESI\\TESI TESI\\ONTOLOGIA\\my2secOWLFunctional.owl";
 
         //public void startTest_ruleManager () {
         Logging.logger.info("** running ruleManager Test");
@@ -204,28 +209,21 @@ public class TaskAI extends ITool {
 
         //aggiungo il member
         ruleManager.add_member(user_uri_parsed);
-       /* for (RDFTermURI activity_type: tasks.keySet()) {
-            ruleManager.add_task(user_uri_parsed,activity_type.getValue(),activity_type);
-        }*/
 
         //con dei cicli entro negli HashMap di activities e tasks per aggiungere attività e task al ruleManager
         //fuori sto ciclando tutti gli activitytype, quindi prendo per ogni activitytype
         for (RDFTermURI activity_type : activities.keySet()){
             //dentro sto prendendo per ogni activitytype e vado a ciclarre sugli uri
             for(RDFTermURI activity_uri : activities.get(activity_type).keySet()) {
-                    Logging.logger.info("Validating: " + activity_type.getValue().toString());
-                    //capisci qua come accedere
+                    Logging.logger.trace("Validating: " + activity_type.getValue().toString());
                     ruleManager.add_activity(user_uri_parsed, activity_uri.toString(), activity_type.toString(),activities.get(activity_type).get(activity_uri).toString());
-                    //System.out.println("activityUri:" + activity_uri.toString());
-                    //System.out.println("activityType:" + activity_type.toString());
-                    //System.out.println("duration:" + activities.get(activity_type).get(activity_uri).toString());
+
             }
         }
         for (RDFTermURI task_type: tasks.keySet()) {
             for(RDFTermURI task_uri : tasks.get(task_type)) {
                 ruleManager.add_task(user_uri_parsed,task_uri.toString() , task_type.toString());
-                //System.out.println("taskUri:" + task_uri.toString());
-                //System.out.println("taskType:" + task_type.toString());
+
             }
         }
         SQWRLResult result= ruleManager.parseRule();
@@ -239,16 +237,26 @@ public class TaskAI extends ITool {
                 if(memberUri.equals(user_uri_parsed)){
 
                 //GET RESULTS
-                int newIndex=result.getNamedIndividual("M").toString().indexOf(":");
-                String member_uri= result.getNamedIndividual("M").toString().substring(newIndex+1);
-                Logging.logger.trace("Member: " + member_uri);
+                Logging.logger.trace("Member: " + memberUri);
                 // System.out.println("Member: " + result.getLiteral("M"));
                 Logging.logger.trace("Duration: " + result.getLiteral("time").getValue());
-                Logging.logger.trace("Task: " + result.getNamedIndividual("T").getIRI());
+                Logging.logger.trace("Task: " + result.getNamedIndividual("T").getIRI()); //quì è già nel formato che mi va bene
 
-                //PREPROCESS
-                String newStringifiedTask = result.getNamedIndividual("T").getIRI().toString();
+                //PREPROCESS - estrapolo la stringa dell'URI da result.getNamedIndividual("T").getIRI() e poi lo trasformo in RDFTermURI
+                int newIndexStart =   result.getNamedIndividual("T").getIRI().toString().indexOf(":");
+                int newIndexStop =   result.getNamedIndividual("T").getIRI().toString().indexOf(",");
+                String taskUriString = result.getNamedIndividual("T").getIRI().toString().substring(newIndexStart+2,newIndexStop-1);
+                Logging.logger.trace("taskUriString ottenuto dal preProcess"+ taskUriString);
+
+                RDFTermURI taskUri = new RDFTermURI(taskUriString); //questo va bene
+                Logging.logger.trace("Questo è il taskUri postProcess:"+ taskUri);
+                /*IRI newIRITask = result.getNamedIndividual("T").getIRI();
+                System.out.println("#####IRI:  "+ newIRITask);
+                String newStringifiedTask = newIRITask.toString();
+                System.out.println("#################newStringifiedTask:"+newStringifiedTask);
+                System.out.println("QUESTO è QUELLO CHE DEVE ENTRARE ED è UN URI E NON UNA STRINGA CAZZO");
                 RDFTermURI taskUri = new RDFTermURI(newStringifiedTask);
+                 */ //questo è il pezzo di preprocess che ho cambiato
 
                 String literalDuration=result.getLiteral("time").getValue();
                 Float singleActivityDuration=Float.parseFloat(literalDuration);
@@ -265,18 +273,31 @@ public class TaskAI extends ITool {
                 }
 
             }else{
-                    System.out.println("Ignored result for "+result.getNamedIndividual("M")+", expected: "+user_uri_parsed);
+                    Logging.logger.trace("Ignored result for "+result.getNamedIndividual("M")+", expected: "+user_uri_parsed);
                  }
             }
         } catch (SQWRLException e) {
             throw new RuntimeException(e);
         }
-        Logging.logger.info(taskDurationCache);
+        Logging.logger.trace("Vediamo l'HashMap completo: "+taskDurationCache);
+
+        //quì faccio tutte le remove
+        ruleManager.remove_member(user_uri_parsed);
+        for (RDFTermURI activity_type : activities.keySet()){
+            for(RDFTermURI activity_uri : activities.get(activity_type).keySet()) {
+                ruleManager.remove_activity(user_uri_parsed, activity_uri.toString(), activity_type.toString(),activities.get(activity_type).get(activity_uri).toString());
+            }
+        }
+        for (RDFTermURI task_type: tasks.keySet()) {
+            for(RDFTermURI task_uri : tasks.get(task_type)) {
+                ruleManager.remove_task(user_uri_parsed,task_uri.toString() , task_type.toString());
+            }
+        }
 
         //ORA MI CICLO L'HASH MAP E PRODUCO I LOG TIMES
         for(RDFTermURI currTaskUri: taskDurationCache.keySet()){
-            System.out.println("task uri term: "+currTaskUri);
-            System.out.println("task uri value string: "+currTaskUri.getValue());
+            Logging.logger.trace("task uri term: "+currTaskUri);
+            Logging.logger.trace("task uri value string: "+currTaskUri.getValue());//così facendo mi stampa solo la stringa dell'URI
             //user uri, currTaskUri, taskLogTime
             Float currTaskLogTime = taskDurationCache.get(currTaskUri);
             Logging.logger.info(">> LOG TIME: "+currTaskLogTime+" TASK URI: "+currTaskUri);
@@ -289,49 +310,7 @@ public class TaskAI extends ITool {
         }
 
 
-        //OLD CODE
-        /*
-        for (RDFTermURI activity_type : activities.keySet()) {
-            //cerca un match tra le task e le attività
-            Logging.logger.info("Validating: "+activity_type.getValue());
-            Boolean foundTask=false;
-            RDFTermURI task_uri=new RDFTermURI(""); //find matching task
-            for (RDFTermURI task : tasks.keySet()) {
-                System.out.println(task.getValue());
-                if(task.getValue().equals(activity_type.getValue())){
-                   foundTask=true;
-                   HashSet<RDFTermURI> taskSet = tasks.get(task);
-                   for(RDFTermURI temp : taskSet){
-                        System.out.println(temp.getValue());
-                        task_uri=temp;
-                   }
-                   //task_uri=new RDFTermURI();
-                   break;
-                }
-            }
-            //se l'activity type non è presente nelle task assegnate...
-            Float log_time=0.0f;
-            if(!foundTask){
-                //throw new error
-                Logging.logger.warn("Invalid activity");
-            }else {
-                //else
-                Logging.logger.info("> Calculating time spent on activity_type: "+activity_type.getValue());
-                HashMap<RDFTermURI,Float> activitiesByType=activities.get(activity_type);
-                for(RDFTermURI activity_uri : activitiesByType.keySet()){
-                    Float activity_duration=activitiesByType.get(activity_uri);
-                    log_time=log_time+activity_duration;
-                }
-                Logging.logger.info(">> LOG TIME: "+log_time+" TASK URI: "+task_uri.getValue());
-                Logging.logger.info("Updating log time to sepa");
-                logTimeProducer.setUpdateBindingValue("usergraph", new RDFTermURI(userUri));
-                logTimeProducer.setUpdateBindingValue("task_uri", task_uri);//new RDFTerm(task_uri.getValue()));
-                logTimeProducer.setUpdateBindingValue("log_time", new RDFTermLiteral(Float.toString(log_time)));
-                logTimeProducer.update();
-                Logging.logger.info("UPDATED!");
-            }
-        }//end of for()
-        */
+
     }
 
 

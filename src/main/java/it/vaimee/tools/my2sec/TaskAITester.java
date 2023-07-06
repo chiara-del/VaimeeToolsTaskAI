@@ -20,6 +20,7 @@ import it.vaimee.sepa.producers.my2sec.TaskProducer;
 
 //import ruleManager
 import it.vaimee.sepa.utilities.RuleManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.swrlapi.sqwrl.SQWRLResult;
 import org.swrlapi.sqwrl.exceptions.SQWRLException;
 
@@ -56,7 +57,7 @@ public class TaskAITester extends ITool{
         ruleManager= new RuleManager(my2secVEROFunctional);
     }
 
-    public void startTest_ruleManager(){
+    public void startTest_ruleManager() throws OWLOntologyStorageException {
         Logging.logger.info("** running ruleManager Test");
         String user_uri="http://www.vaimee.it/my2sec/defuser@vaimee.it";
         int lastIndex= user_uri.lastIndexOf("/");
@@ -69,35 +70,65 @@ public class TaskAITester extends ITool{
         //System.out.println(leftSide+"___"+rightSide);
         String user_uri_parsed=leftSide+"___"+rightSide;
         ruleManager.add_member(user_uri_parsed);
-        ruleManager.add_task(user_uri_parsed,"_8jdsid98ud982","http://www.vaimee.it/ontology/my2sec#Developing");
-        ruleManager.add_activity(user_uri_parsed,"_ceu8eu298euc20","http://www.vaimee.it/ontology/my2sec#Developing","15.3");
-        ruleManager.add_activity(user_uri_parsed,"_dm8328dmj928d9","http://www.vaimee.it/ontology/my2sec#Developing","32.0");
-        ruleManager.add_activity(user_uri_parsed,"_dj82i0d82mid27","http://www.vaimee.it/ontology/my2sec#Developing","18.15");
-        ruleManager.add_activity(user_uri_parsed,"_du8nndh2nu2929","http://www.vaimee.it/ontology/my2sec#Researching","443.0");
-        SQWRLResult result= ruleManager.parseRule();
+        ruleManager.add_task(user_uri_parsed,"_8jdsid98ud982","http://www.vaimee.it/ontology/my2sec#Researching");
+        ruleManager.add_activity(user_uri_parsed,"_ceu8eu298euc20","http://www.vaimee.it/ontology/my2sec#Developing","15.4");
+        ruleManager.add_activity(user_uri_parsed,"_dm8328dmj928d9","http://www.vaimee.it/ontology/my2sec#Developing","11.0");
+        ruleManager.add_activity(user_uri_parsed,"_dj82i0d82mid27","http://www.vaimee.it/ontology/my2sec#Developing","85.15");
+        ruleManager.add_activity(user_uri_parsed,"_du8nndh2nu2929","http://www.vaimee.it/ontology/my2sec#Researching","408.0");
+        //SQWRLResult result= ruleManager.parseRule();
+
+        //quì rimuovo dati
+        /*
+        ruleManager.remove_member(user_uri_parsed);
+        ruleManager.remove_task(user_uri_parsed,"_8jdsid98ud982","http://www.vaimee.it/ontology/my2sec#Researching");
+        ruleManager.remove_activity(user_uri_parsed,"_ceu8eu298euc20","http://www.vaimee.it/ontology/my2sec#Developing","15.4");
+        ruleManager.remove_activity(user_uri_parsed,"_dm8328dmj928d9","http://www.vaimee.it/ontology/my2sec#Developing","11.0");
+        ruleManager.remove_activity(user_uri_parsed,"_dj82i0d82mid27","http://www.vaimee.it/ontology/my2sec#Developing","85.15");
+        ruleManager.remove_activity(user_uri_parsed,"_du8nndh2nu2929","http://www.vaimee.it/ontology/my2sec#Researching","408.0");
+        */
+
+        //ruleManager.save_ontology();
+        ruleManager.add_task(user_uri_parsed,"qwerty","http://www.vaimee.it/ontology/my2sec#Developing");
+        ruleManager.add_activity(user_uri_parsed,"fgh","http://www.vaimee.it/ontology/my2sec#Developing","15.3");
+        ruleManager.add_activity(user_uri_parsed,"asdf","http://www.vaimee.it/ontology/my2sec#Developing","32.0");
+        ruleManager.add_activity(user_uri_parsed,"sdfg","http://www.vaimee.it/ontology/my2sec#Developing","18.15");
+        ruleManager.add_activity(user_uri_parsed,"zxcv","http://www.vaimee.it/ontology/my2sec#Researching","443.0");
+
+        //quì rimuovo dati
+        /*
+        ruleManager.remove_task(user_uri_parsed,"qwerty","http://www.vaimee.it/ontology/my2sec#Developing");
+        ruleManager.remove_activity(user_uri_parsed,"fgh","http://www.vaimee.it/ontology/my2sec#Developing","15.3");
+        ruleManager.remove_activity(user_uri_parsed,"asdf","http://www.vaimee.it/ontology/my2sec#Developing","32.0");
+        ruleManager.remove_activity(user_uri_parsed,"sdfg","http://www.vaimee.it/ontology/my2sec#Developing","18.15");
+        ruleManager.remove_activity(user_uri_parsed,"zxcv","http://www.vaimee.it/ontology/my2sec#Researching","443.0");
+        */
+
+        SQWRLResult result2= ruleManager.parseRule();
+
         try {
-            int total=0;
-            int pass = 0;
-            while(result.next()) {
-                int newIndex=result.getNamedIndividual("M").toString().indexOf(":");
-                String member_uri= result.getNamedIndividual("M").toString().substring(newIndex+1);
+            //int total=0;
+            //int pass = 0;
+            while(result2.next()) {
+                int newIndex=result2.getNamedIndividual("M").toString().indexOf(":");
+                String member_uri= result2.getNamedIndividual("M").toString().substring(newIndex+1);
 
                 if(member_uri.equals(user_uri_parsed)){
                     System.out.println("Member: " + member_uri);
                     // System.out.println("Member: " + result.getLiteral("M"));
-                    System.out.println("Activity: " + result.getNamedIndividual("AV"));
-                    System.out.println("Task: " + result.getNamedIndividual("T"));
+                    //System.out.println("Activity: " + result.getNamedIndividual("AV"));
+                    System.out.println("Task: " + result2.getNamedIndividual("T"));
                     //System.out.println("Duration: "+result.getObjectProperty("time"));
-                    String literalDuration=result.getLiteral("time").getValue();
+                    String literalDuration=result2.getLiteral("time").getValue();
                     Float numericDuration=Float.parseFloat(literalDuration);
                     System.out.println("the value is:"+ numericDuration.toString());
                     // dentro pass ci devo mettere result.getDataProperty("time") però in modo tale che possa essere sommata al totale
                     // bisogna creare delle durate da poter mettere e fare elaborale alla rule collegate all'utente
-                    total = total + pass;
+                    //total = total + pass;
                 }else{
-                    System.out.println("Ignored result for "+result.getNamedIndividual("M")+", expected: "+user_uri_parsed);
+                    System.out.println("Ignored result for "+result2.getNamedIndividual("M")+", expected: "+user_uri_parsed);
                 }
             }
+
         } catch (SQWRLException e) {
             throw new RuntimeException(e);
         }
@@ -142,7 +173,11 @@ public class TaskAITester extends ITool{
         Logging.logger.info("----------------< TESTER STARTED >-----------------");
         //taskAI.start();
         //logTimeConsumer.subscribe();
-        startTest_ruleManager();
+            try {
+                startTest_ruleManager();
+            } catch (OWLOntologyStorageException e) {
+                throw new RuntimeException(e);
+            }
     }
 }
 

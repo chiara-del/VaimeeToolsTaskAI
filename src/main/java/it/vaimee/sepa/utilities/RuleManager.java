@@ -66,7 +66,7 @@ public class RuleManager {
         // Create SQWRL query engine using the SWRLAPI
         queryEngine = SWRLAPIFactory.createSQWRLQueryEngine(ontology);
 
-        //Dichiara classi
+        //Dichiaro classi e le proprietà
         member = OWLFunctionalSyntaxFactory.Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Member"));
         task = OWLFunctionalSyntaxFactory.Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Task"));
         activity = OWLFunctionalSyntaxFactory.Class(OWLFunctionalSyntaxFactory.IRI("http://vaimee.com/My2Sec#Activity"));
@@ -89,6 +89,7 @@ public class RuleManager {
         } catch (SQWRLException e) {
             throw new RuntimeException(e);
         }*/
+
     }
 
 
@@ -97,6 +98,11 @@ public class RuleManager {
     public void add_member(String usergraph){
         OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
         ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(member,individual));
+    }
+    public void remove_member(String usergraph){
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        ontologyManager.removeAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(member,individual));
+        Logging.logger.trace("ho rimosso member");
     }
     public void add_task(String usergraph,String taskUri, String activity_type){
         OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
@@ -110,6 +116,18 @@ public class RuleManager {
         ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,individualTask,activityTypeIndividual));
         ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(attachedTo,individualTask,individual));
     }
+    public void remove_task(String usergraph,String taskUri, String activity_type){
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        OWLNamedIndividual individualTask = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(taskUri));
+        OWLNamedIndividual activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activity_type));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(task,individualTask));
+
+        //questi sono i remove
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ClassAssertion(activityType,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,individualTask,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(attachedTo,individualTask,individual));
+        Logging.logger.trace("ho rimosso task");
+    }
     public void add_activity(String usergraph, String activityUri, String activity_type, String duration){
         OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
         OWLNamedIndividual activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activity_type));
@@ -122,6 +140,88 @@ public class RuleManager {
         ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasMember,activity1,individual));
         ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.DataPropertyAssertion(numericDuration, activity1,individualDuration));
     }
+    public void remove_activity(String usergraph, String activityUri, String activity_type, String duration){
+        //vediamo se ricreando gli individui funziona
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        OWLNamedIndividual activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activity_type));
+        OWLNamedIndividual activity1 = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activityUri));
+        OWLLiteral individualDuration = OWLFunctionalSyntaxFactory.Literal(duration);
+
+        //questi sono i remove
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ClassAssertion(activityType,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ClassAssertion(activity,activity1));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,activity1,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasMember,activity1,individual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.DataPropertyAssertion(numericDuration, activity1,individualDuration));
+        Logging.logger.trace("ho rimosso activity");
+    }
+
+
+    //COPY
+    /*
+    public void add_member(String usergraph){
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(member,individual));
+    }
+    public void remove_member(String usergraph){
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        ontologyManager.removeAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(member,individual));
+    }
+    public void add_task(String usergraph,String taskUri, String activity_type){
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        OWLNamedIndividual individualTask = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(taskUri));
+        OWLNamedIndividual activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activity_type));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(task,individualTask));
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //QUI C'E' UN WORKAROUND: DICHIARO activityTypeIndividual solo in add_task, serve anche in add_activity ma lo faccio solo una volta qui
+        //SE arrivano attività il quale activity_type non è presente tra le task,
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ClassAssertion(activityType,activityTypeIndividual));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,individualTask,activityTypeIndividual));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(attachedTo,individualTask,individual));
+    }
+    public void remove_task(String usergraph,String taskUri, String activity_type){
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        OWLNamedIndividual individualTask = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(taskUri));
+        OWLNamedIndividual activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activity_type));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(task,individualTask));
+
+        //questi sono i remove
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ClassAssertion(activityType,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,individualTask,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(attachedTo,individualTask,individual));
+    }
+    public void add_activity(String usergraph, String activityUri, String activity_type, String duration){
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        OWLNamedIndividual activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activity_type));
+        OWLNamedIndividual activity1 = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activityUri));
+        OWLLiteral individualDuration = OWLFunctionalSyntaxFactory.Literal(duration);
+        //OWLDataProperty individualDuration = OWLFunctionalSyntaxFactory.Literal();
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(activityType,activityTypeIndividual));
+        ontologyManager.addAxiom(ontology,OWLFunctionalSyntaxFactory.ClassAssertion(activity,activity1));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,activity1,activityTypeIndividual));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasMember,activity1,individual));
+        ontologyManager.addAxiom(ontology, OWLFunctionalSyntaxFactory.DataPropertyAssertion(numericDuration, activity1,individualDuration));
+    }
+    public void remove_activity(String usergraph, String activityUri, String activity_type, String duration){
+        //vediamo se ricreando gli individui funziona
+        OWLNamedIndividual individual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(usergraph));
+        OWLNamedIndividual activityTypeIndividual = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activity_type));
+        OWLNamedIndividual activity1 = OWLFunctionalSyntaxFactory.NamedIndividual(OWLFunctionalSyntaxFactory.IRI(activityUri));
+        OWLLiteral individualDuration = OWLFunctionalSyntaxFactory.Literal(duration);
+
+        //questi sono i remove
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ClassAssertion(activityType,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ClassAssertion(activity,activity1));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasActivityType,activity1,activityTypeIndividual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.ObjectPropertyAssertion(hasMember,activity1,individual));
+        ontologyManager.removeAxiom(ontology, OWLFunctionalSyntaxFactory.DataPropertyAssertion(numericDuration, activity1,individualDuration));
+
+    }
+        public void save_ontology() throws OWLOntologyStorageException {
+            ontologyManager.saveOntology(ontology);
+        }
+     */
+
 
     public SQWRLResult parseRule(){
         //System.out.println("PARSING RULE...");
